@@ -11,16 +11,8 @@ import java.util.Objects;
 public class TimeStampScalar {
     public static final GraphQLScalarType GraphQLTimestamp;
 
-    private static String typeName(Object input) {
-        if (input == null) {
-            return "null";
-        }
-
-        return input.getClass().getSimpleName();
-    }
-
     static {
-        Coercing<Timestamp, Timestamp> timeStampCoercing = new Coercing<Timestamp, Timestamp>() {
+        Coercing<Timestamp, Timestamp> timeStampCoercing = new Coercing<>() {
 
             private Timestamp convertImpl(Object input) {
                 if (input instanceof Timestamp) {
@@ -73,5 +65,13 @@ public class TimeStampScalar {
         GraphQLTimestamp = GraphQLScalarType.newScalar()
                 .name("Timestamp").description("An arbitrary precision signed decimal")
                 .coercing(timeStampCoercing).build();
+    }
+
+    private static String typeName(Object input) {
+        if (input == null) {
+            return "null";
+        }
+
+        return input.getClass().getSimpleName();
     }
 }
