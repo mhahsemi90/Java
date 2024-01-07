@@ -1,10 +1,13 @@
-package com.fanap.hcm.core.pcn.repository.entity;
+package com.fanap.hcm.core.hcmcore.pcn.repository.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Setter
 @Getter
@@ -36,10 +39,16 @@ public class Person {
             updatable = false
     )
     private Long id;
+
     @Column(
             name = "vr_id",
-            columnDefinition = "TEXT",
             nullable = false
     )
     private String vrId;
+
+    @OneToMany(mappedBy = "person")
+    private List<OutputPersonTransaction> outputPersonTransactionList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "person")
+    private List<InputPersonTransaction> inputPersonTransactionList = new ArrayList<>();
 }

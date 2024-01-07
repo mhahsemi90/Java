@@ -1,0 +1,77 @@
+scalar Timestamp
+type Person{
+    id: ID!
+    vrId: String!
+    outputPersonTransactionList: [OutputPersonTransaction]!
+    inputPersonTransactionList: [InputPersonTransaction]!
+}
+type Calculation{
+    id: ID!
+    actionDate: Timestamp!
+    inputPersonTransactionList: [InputPersonTransaction]!
+    outputPersonTransactionList: [OutputPersonTransaction]!
+}
+type InputParameter{
+    id: ID!
+    code: String!
+    title: String!
+    dataType: String!
+    inputPersonValueList: [InputPersonValue]!
+}
+type OutputParameter{
+    id: ID!
+    code: String!
+    title: String!
+    dataType: String!
+    formula: String!
+    outputPersonValueList: [OutputPersonValue]!
+}
+type OutputPersonTransaction{
+    id: ID!
+    person: Person!
+    calculation: Calculation!
+    outputPersonValueList: [OutputPersonValue]!
+}
+type InputPersonTransaction{
+    id: ID!
+    person: Person!
+    calculation: Calculation!
+    inputPersonValueList: [InputPersonValue]!
+}
+type InputPersonValue{
+    id: ID!
+    data: String!
+    dataType: String!
+    inputParameter: InputParameter!
+    inputPersonTransaction: InputPersonTransaction!
+}
+type OutputPersonValue{
+    id: ID!
+    data: String!
+    dataType: String!
+    outputParameter: OutputParameter!
+    outputPersonTransaction: OutputPersonTransaction!
+}
+input PersonDto{
+    vrId: String!
+}
+input OutputParameterDto{
+    code: String!
+    title: String!
+    dataType: String!
+}
+input InputParameterDto{
+    code: String!
+    title: String!
+    dataType: String!
+}
+type Query {
+    findPerson(id: ID!): Person
+    findPersonByVrId(vrId: String!): Person
+    findCalculationById(id: ID!): Calculation
+}
+type Mutation{
+    persistNewPerson(personInput: PersonDto!): Person
+    persistNewOutputParameter(outputParameterInput: OutputParameterDto!): OutputParameter
+    persistNewInputParameter(inputParameterInput: InputParameterDto!): InputParameter
+}
