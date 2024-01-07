@@ -59,8 +59,8 @@ public class OutputParameter {
     private String dataType;
 
     @Column(
-            name = "fomrula",
-            nullable = true
+            name = "formula",
+            nullable = false
     )
     private String formula;
 
