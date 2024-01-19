@@ -59,5 +59,5 @@ public class InputParameter {
     private String dataType;
 
     @OneToMany(mappedBy = "inputParameter")
-    private List<InputPersonValue> inputPersonValueList = new ArrayList<>();
+    private List<InputElementValue> inputElementValueList = new ArrayList<>();
 }

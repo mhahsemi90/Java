@@ -13,6 +13,7 @@ public class AppConfiguration {
     public ModelMapper modelMapper() {
         return new ModelMapper();
     }
+
     @Bean
     public RuntimeWiringConfigurer runtimeWiringConfigurer() {
         return wiringBuilder -> wiringBuilder

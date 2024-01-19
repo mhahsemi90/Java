@@ -14,25 +14,25 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(
-        name = "person",
+        name = "element_type",
         uniqueConstraints = {
                 @UniqueConstraint(
-                        name = "person_unique_vr_id",
-                        columnNames = "vr_id"
+                        name = "element_type_unique_code",
+                        columnNames = "code"
                 )
         }
 )
-@Entity(name = "Person")
-public class Person {
+@Entity(name = "ElementType")
+public class ElementType {
     @Id
     @SequenceGenerator(
-            name = "Person_ID",
-            sequenceName = "Person_ID",
+            name = "ElementType_ID",
+            sequenceName = "ElementType_ID",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "Person_ID"
+            generator = "ElementType_ID"
     )
     @Column(
             name = "id",
@@ -41,14 +41,17 @@ public class Person {
     private Long id;
 
     @Column(
-            name = "vr_id",
+            name = "code",
             nullable = false
     )
-    private String vrId;
+    private String code;
 
-    @OneToMany(mappedBy = "person")
-    private List<OutputPersonTransaction> outputPersonTransactionList = new ArrayList<>();
+    @Column(
+            name = "title",
+            nullable = false
+    )
+    private String title;
 
-    @OneToMany(mappedBy = "person")
-    private List<InputPersonTransaction> inputPersonTransactionList = new ArrayList<>();
+    @OneToMany(mappedBy = "elementType")
+    private List<Element> elementList = new ArrayList<>();
 }

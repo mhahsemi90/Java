@@ -58,12 +58,6 @@ public class OutputParameter {
     )
     private String dataType;
 
-    @Column(
-            name = "formula",
-            nullable = false
-    )
-    private String formula;
-
     @OneToMany(mappedBy = "outputParameter")
-    private List<OutputPersonValue> outputPersonValueList = new ArrayList<>();
+    private List<OutputElementValue> outputElementValueList = new ArrayList<>();
 }

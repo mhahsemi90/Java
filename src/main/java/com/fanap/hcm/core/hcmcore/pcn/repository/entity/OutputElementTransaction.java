@@ -14,19 +14,19 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(
-        name = "input_person_transaction"
+        name = "output_element_transaction"
 )
-@Entity(name = "InputPersonTransaction")
-public class InputPersonTransaction {
+@Entity(name = "OutputElementTransaction")
+public class OutputElementTransaction {
     @Id
     @SequenceGenerator(
-            name = "InputPersonTransaction_ID",
-            sequenceName = "InputPersonTransaction_ID",
+            name = "OutputElementTransaction_ID",
+            sequenceName = "OutputElementTransaction_ID",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "InputPersonTransaction_ID"
+            generator = "OutputElementTransaction_ID"
     )
     @Column(
             name = "id",
@@ -36,22 +36,23 @@ public class InputPersonTransaction {
 
     @ManyToOne
     @JoinColumn(
-            name = "person_id",
+            name = "element_id",
             referencedColumnName = "id",
             nullable = false,
-            foreignKey = @ForeignKey(name = "input_person_transaction_person_id_fk")
+            foreignKey = @ForeignKey(name = "output_element_transaction_element_id_fk")
     )
-    private Person person;
+    private Element element;
 
     @ManyToOne
     @JoinColumn(
             name = "calculation_id",
             referencedColumnName = "id",
-            nullable = false,
-            foreignKey = @ForeignKey(name = "input_person_transaction_calculation_id_fk")
+            foreignKey = @ForeignKey(name = "output_element_transaction_calculation_id_fk")
     )
     private Calculation calculation;
 
-    @OneToMany(mappedBy = "inputPersonTransaction")
-    private List<InputPersonValue> inputPersonValueList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "outputElementTransaction")
+    private List<OutputElementValue> outputElementValueList = new ArrayList<>();
+
 }

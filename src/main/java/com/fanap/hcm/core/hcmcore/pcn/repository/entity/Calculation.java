@@ -42,8 +42,8 @@ public class Calculation {
     private Date actionDate;
 
     @OneToMany(mappedBy = "calculation")
-    private List<OutputPersonTransaction> outputPersonTransactionList = new ArrayList<>();
+    private List<OutputElementTransaction> outputElementTransactionList = new ArrayList<>();
 
     @OneToMany(mappedBy = "calculation")
-    private List<InputPersonTransaction> inputPersonTransactionList = new ArrayList<>();
+    private List<InputElementTransaction> inputElementTransactionList = new ArrayList<>();
 }

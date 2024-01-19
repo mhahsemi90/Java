@@ -1,77 +1,103 @@
 scalar Timestamp
-type Person{
+type ElementType{
+    id: ID!
+    code: String!
+    title: String!
+}
+type Element{
     id: ID!
     vrId: String!
-    outputPersonTransactionList: [OutputPersonTransaction]!
-    inputPersonTransactionList: [InputPersonTransaction]!
+    elementType: ElementType!
+    outputElementTransactionList: [OutputElementTransaction]!
+    inputElementTransactionList: [InputElementTransaction]!
 }
 type Calculation{
     id: ID!
     actionDate: Timestamp!
-    inputPersonTransactionList: [InputPersonTransaction]!
-    outputPersonTransactionList: [OutputPersonTransaction]!
+    inputElementTransactionList: [InputElementTransaction]!
+    outputElementTransactionList: [OutputElementTransaction]!
 }
 type InputParameter{
     id: ID!
     code: String!
     title: String!
     dataType: String!
-    inputPersonValueList: [InputPersonValue]!
+    inputElementValueList: [InputElementValue]!
 }
 type OutputParameter{
     id: ID!
     code: String!
     title: String!
     dataType: String!
-    formula: String!
-    outputPersonValueList: [OutputPersonValue]!
+    outputElementValueList: [OutputElementValue]!
 }
-type OutputPersonTransaction{
+type OutputElementTransaction{
     id: ID!
-    person: Person!
+    element: Element!
     calculation: Calculation!
-    outputPersonValueList: [OutputPersonValue]!
+    outputElementValueList: [OutputElementValue]!
 }
-type InputPersonTransaction{
+type InputElementTransaction{
     id: ID!
-    person: Person!
+    element: Element!
     calculation: Calculation!
-    inputPersonValueList: [InputPersonValue]!
+    inputElementValueList: [InputElementValue]!
 }
-type InputPersonValue{
+type InputElementValue{
     id: ID!
     data: String!
     dataType: String!
     inputParameter: InputParameter!
-    inputPersonTransaction: InputPersonTransaction!
+    inputElementTransaction: InputElementTransaction!
 }
-type OutputPersonValue{
+type OutputElementValue{
     id: ID!
     data: String!
     dataType: String!
     outputParameter: OutputParameter!
-    outputPersonTransaction: OutputPersonTransaction!
+    outputElementTransaction: OutputElementTransaction!
 }
-input PersonDto{
+input ElementTypeInput{
+    code: String!
+    title: String!
+}
+input ElementInput{
     vrId: String!
+    elementType: String!
 }
-input OutputParameterDto{
+input OutputParameterInput{
     code: String!
     title: String!
     dataType: String!
 }
-input InputParameterDto{
+input InputParameterInput{
     code: String!
     title: String!
     dataType: String!
+}
+input OutputParameterIdAndFormula{
+    outputParameterId: ID!
+    elementId: ID!
+    formula: String!
+}
+input InputParameterAndElementValue{
+    inputParameterId: ID!
+    elementId: ID!
+    value: String!
 }
 type Query {
-    findPerson(id: ID!): Person
-    findPersonByVrId(vrId: String!): Person
+    findElementById(id: ID!): Element
+    findElementByVrIdAndByElementType(vrId: String!, elementTypeCode: String!): Element
     findCalculationById(id: ID!): Calculation
 }
 type Mutation{
-    persistNewPerson(personInput: PersonDto!): Person
-    persistNewOutputParameter(outputParameterInput: OutputParameterDto!): OutputParameter
-    persistNewInputParameter(inputParameterInput: InputParameterDto!): InputParameter
+    persistElement(ElementInput: ElementInput!): Element
+    persistOutputParameter(outputParameterInput: OutputParameterInput!): OutputParameter
+    persistInputParameter(inputParameterInput: InputParameterInput!): InputParameter
+    persistElementType(elementTypeInput: ElementTypeInput!): ElementType
+    calculate(
+        inputParameterAndElementValueList: [InputParameterAndElementValue],
+        outputParameterAndFormulaList: [OutputParameterIdAndFormula],
+        actionDate: Timestamp
+    ): Calculation
 }

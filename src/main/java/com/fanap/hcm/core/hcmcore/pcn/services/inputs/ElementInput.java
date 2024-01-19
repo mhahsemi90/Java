@@ -7,9 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class OutputParameterInput {
+public class ElementInput {
     private Long id;
-    private String code;
-    private String title;
-    private String dataType;
+    private String vrId;
+    private String elementType;
 }

@@ -11,19 +11,19 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(
-        name = "input_person_value"
+        name = "input_element_value"
 )
-@Entity(name = "InputPersonValue")
-public class InputPersonValue {
+@Entity(name = "InputElementValue")
+public class InputElementValue {
     @Id
     @SequenceGenerator(
-            name = "InputPersonValue_ID",
-            sequenceName = "InputPersonValue_ID",
+            name = "InputElementValue_ID",
+            sequenceName = "InputElementValue_ID",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "InputPersonValue_ID"
+            generator = "InputElementValue_ID"
     )
     @Column(
             name = "id",
@@ -48,16 +48,16 @@ public class InputPersonValue {
             name = "input_parameter_id",
             referencedColumnName = "id",
             nullable = false,
-            foreignKey = @ForeignKey(name = "input_person_value_input_parameter_id_fk")
+            foreignKey = @ForeignKey(name = "input_element_value_input_parameter_id_fk")
     )
     private InputParameter inputParameter;
 
     @ManyToOne
     @JoinColumn(
-            name = "input_person_transaction_id",
+            name = "input_element_transaction_id",
             referencedColumnName = "id",
             nullable = false,
-            foreignKey = @ForeignKey(name = "input_person_value_input_person_transaction_id_fk")
+            foreignKey = @ForeignKey(name = "input_element_value_input_element_transaction_id_fk")
     )
-    private InputPersonTransaction inputPersonTransaction;
+    private InputElementTransaction inputElementTransaction;
 }
