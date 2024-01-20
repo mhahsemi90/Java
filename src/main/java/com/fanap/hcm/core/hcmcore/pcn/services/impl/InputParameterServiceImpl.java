@@ -2,11 +2,16 @@ package com.fanap.hcm.core.hcmcore.pcn.services.impl;
 
 import com.fanap.hcm.core.hcmcore.pcn.repository.entity.InputParameter;
 import com.fanap.hcm.core.hcmcore.pcn.repository.service.interfaces.IInputParameterRepository;
+import com.fanap.hcm.core.hcmcore.pcn.services.inputs.InputParameterAndElementValue;
 import com.fanap.hcm.core.hcmcore.pcn.services.inputs.InputParameterInput;
 import com.fanap.hcm.core.hcmcore.pcn.services.interfaces.IInputParameterService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -18,6 +23,15 @@ public class InputParameterServiceImpl implements IInputParameterService {
     public InputParameter persistInputParameter(InputParameterInput inputParameterInput) {
         return inputParameterRepository.save(
                 modelMapper.map(inputParameterInput, InputParameter.class)
+        );
+    }
+
+    @Override
+    public Collector<InputParameterAndElementValue, ?, Map<InputParameter, String>> collectInputInformationToMap() {
+        return Collectors.toMap(
+                inputParameterAndElementValue ->
+                        inputParameterRepository.getReferenceById(inputParameterAndElementValue.getInputParameterId())
+                , InputParameterAndElementValue::getValue
         );
     }
 }

@@ -7,6 +7,8 @@ import com.fanap.hcm.core.hcmcore.pcn.services.dto.InputAndOutputParameterElemen
 import com.fanap.hcm.core.hcmcore.pcn.services.inputs.InputParameterAndElementValue;
 import com.fanap.hcm.core.hcmcore.pcn.services.inputs.OutputParameterIdAndFormula;
 import com.fanap.hcm.core.hcmcore.pcn.services.interfaces.ICalculationService;
+import com.fanap.hcm.core.hcmcore.pcn.services.interfaces.IInputParameterService;
+import com.fanap.hcm.core.hcmcore.pcn.services.interfaces.IOutputParameterService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
@@ -23,7 +25,6 @@ import java.sql.Timestamp;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -31,8 +32,8 @@ import java.util.stream.Stream;
 @AllArgsConstructor
 public class CalculationServiceImpl implements ICalculationService {
     private final ICalculationRepository calculationRepository;
-    private final IOutputParameterRepository outputParameterRepository;
-    private final IInputParameterRepository inputParameterRepository;
+    private final IOutputParameterService outputParameterService;
+    private final IInputParameterService inputParameterService;
     private final IElementRepository elementRepository;
     private final IInputElementTransactionRepository inputElementTransactionRepository;
     private final IOutputElementTransactionRepository outputElementTransactionRepository;
@@ -94,14 +95,14 @@ public class CalculationServiceImpl implements ICalculationService {
     }
 
     private BiConsumer<OutputParameter, String> getBuilderForCreatOutputParamValue(OutputElementTransaction outputElementTransaction) {
-        return (outputParameter, s) -> {
-            OutputElementValue outputElementValue = new OutputElementValue();
-            outputElementValue.setData(s);
-            outputElementValue.setOutputParameter(outputParameter);
-            outputElementValue.setDataType(outputParameter.getDataType());
-            outputElementValue.setOutputElementTransaction(outputElementTransaction);
-            outputElementValueRepository.save(outputElementValue);
-        };
+        return (outputParameter, s) ->
+                outputElementValueRepository.save(new OutputElementValue(
+                        null,
+                        s,
+                        outputParameter.getDataType(),
+                        outputParameter,
+                        outputElementTransaction
+                ));
     }
 
     private InputElementTransaction persistEachInputValue(InputAndOutputParameterElement inputAndOutputParameterElement) {
@@ -115,14 +116,14 @@ public class CalculationServiceImpl implements ICalculationService {
     }
 
     private BiConsumer<InputParameter, String> getBuilderForCreatInputParamValue(InputElementTransaction inputElementTransaction) {
-        return (inputParameter, s) -> {
-            InputElementValue inputElementValue = new InputElementValue();
-            inputElementValue.setData(s);
-            inputElementValue.setInputParameter(inputParameter);
-            inputElementValue.setDataType(inputParameter.getDataType());
-            inputElementValue.setInputElementTransaction(inputElementTransaction);
-            inputElementValueRepository.save(inputElementValue);
-        };
+        return (inputParameter, s) ->
+                inputElementValueRepository.save(new InputElementValue(
+                        null,
+                        s,
+                        inputParameter.getDataType(),
+                        inputParameter,
+                        inputElementTransaction
+                ));
     }
 
     private CalculatedOutputParameterForElement calculateForEachElementByOwnParameter(InputAndOutputParameterElement inputAndOutputParameterElement) {
@@ -212,13 +213,13 @@ public class CalculationServiceImpl implements ICalculationService {
                     inputParameterAndElementValueList
                             .stream()
                             .filter(getFilterForAllSameInput(aLong))
-                            .collect(collectInputInformationToMap())
+                            .collect(inputParameterService.collectInputInformationToMap())
             );
             inputAndOutputParameterElement.setOutputParamMapList(
                     outputParameterIdAndFormulaList
                             .stream()
                             .filter(getFilterForAllSameOutput(aLong))
-                            .collect(collectOutputInformationToMap())
+                            .collect(outputParameterService.collectOutputInformationToMap())
             );
             inputAndOutputParameterElementList.add(inputAndOutputParameterElement);
         });
@@ -234,21 +235,4 @@ public class CalculationServiceImpl implements ICalculationService {
         return inputParameterAndElementValue ->
                 inputParameterAndElementValue.getElementId().equals(elementId);
     }
-
-    private Collector<InputParameterAndElementValue, ?, Map<InputParameter, String>> collectInputInformationToMap() {
-        return Collectors.toMap(
-                inputParameterAndElementValue ->
-                        inputParameterRepository.getReferenceById(inputParameterAndElementValue.getInputParameterId())
-                , InputParameterAndElementValue::getValue
-        );
-    }
-
-    private Collector<OutputParameterIdAndFormula, ?, Map<OutputParameter, String>> collectOutputInformationToMap() {
-        return Collectors.toMap(
-                outputParameterIdAndFormula ->
-                        outputParameterRepository.getReferenceById(outputParameterIdAndFormula.getOutputParameterId())
-                , OutputParameterIdAndFormula::getFormula
-        );
-    }
-
 }
