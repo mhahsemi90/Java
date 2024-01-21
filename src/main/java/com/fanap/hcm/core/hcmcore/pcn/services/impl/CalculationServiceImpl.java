@@ -79,9 +79,16 @@ public class CalculationServiceImpl implements ICalculationService {
             , Timestamp actionDate) {
         Calculation calculation = new Calculation();
         calculation.setActionDate(actionDate);
-        calculation.setInputElementTransactionList(inputElementTransactionList);
-        calculation.setOutputElementTransactionList(outputElementTransactionList);
-        return calculationRepository.save(calculation);
+        calculation = calculationRepository.save(calculation);
+        for (InputElementTransaction o : inputElementTransactionList) {
+            o.setCalculation(calculation);
+            inputElementTransactionRepository.save(o);
+        }
+        for (OutputElementTransaction o : outputElementTransactionList) {
+            o.setCalculation(calculation);
+            outputElementTransactionRepository.save(o);
+        }
+        return calculation;
     }
 
     private OutputElementTransaction persistEachOutputCalculatedValue(CalculatedOutputParameterForElement calculatedOutputParameterForElement) {
@@ -146,9 +153,10 @@ public class CalculationServiceImpl implements ICalculationService {
         Map<Object, Object> outputParamMap = new LinkedHashMap<>();
         Map<OutputParameter, String> outputParameterValueMap = new LinkedHashMap<>();
         try {
+            ScriptEngineManager manager = new ScriptEngineManager();
+            ScriptEngine engine = manager.getEngineByName("graal.js");
             Reader inputString = new StringReader(script);
             BufferedReader reader = new BufferedReader(inputString);
-            ScriptEngine engine = new ScriptEngineManager().getEngineByName("graal.js");
             engine.eval(reader);
             Invocable invocable = (Invocable) engine;
             Object result = invocable.invokeFunction("_doCalculate");

@@ -27,10 +27,10 @@ public class CalculationController {
     public Calculation calculate(
             @Argument List<InputParameterAndElementValue> inputParameterAndElementValueList,
             @Argument List<OutputParameterIdAndFormula> outputParameterIdAndFormulaList,
-            @Argument Timestamp actionDate) {
+            @Argument String actionDate) {
         return calculationService.calculate(
                 inputParameterAndElementValueList,
                 outputParameterIdAndFormulaList,
-                actionDate);
+                new Timestamp(Long.parseLong(actionDate)));
     }
 }

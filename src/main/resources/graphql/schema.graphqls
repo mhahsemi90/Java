@@ -96,8 +96,8 @@ type Mutation{
     persistInputParameter(inputParameterInput: InputParameterInput!): InputParameter
     persistElementType(elementTypeInput: ElementTypeInput!): ElementType
     calculate(
-        inputParameterAndElementValueList: [InputParameterAndElementValue],
-        outputParameterAndFormulaList: [OutputParameterIdAndFormula],
-        actionDate: Timestamp
+        inputParameterAndElementValueList: [InputParameterAndElementValue]!,
+        outputParameterIdAndFormulaList: [OutputParameterIdAndFormula]!,
+        actionDate: String
     ): Calculation
 }

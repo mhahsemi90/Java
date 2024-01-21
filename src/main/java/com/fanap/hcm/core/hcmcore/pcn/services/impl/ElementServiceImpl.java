@@ -6,18 +6,30 @@ import com.fanap.hcm.core.hcmcore.pcn.repository.service.interfaces.IElementRepo
 import com.fanap.hcm.core.hcmcore.pcn.repository.service.interfaces.IElementTypeRepository;
 import com.fanap.hcm.core.hcmcore.pcn.services.inputs.ElementInput;
 import com.fanap.hcm.core.hcmcore.pcn.services.interfaces.IElementService;
-import lombok.AllArgsConstructor;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 import org.springframework.stereotype.Service;
 
 @Service
-@AllArgsConstructor
 public class ElementServiceImpl implements IElementService {
 
     private final IElementRepository elementRepository;
     private final IElementTypeRepository elementTypeRepository;
     private final ModelMapper modelMapper;
+
+    public ElementServiceImpl(IElementRepository elementRepository, IElementTypeRepository elementTypeRepository, ModelMapper modelMapper) {
+        this.elementRepository = elementRepository;
+        this.elementTypeRepository = elementTypeRepository;
+        this.modelMapper = modelMapper;
+        Converter<String, ElementType> getElementTypeByCode = mappingContext ->
+                elementTypeRepository.findElementTypeByCode(mappingContext.getSource())
+                        .stream()
+                        .findFirst()
+                        .orElse(null);
+        TypeMap<ElementInput, Element> typeMap = modelMapper.createTypeMap(ElementInput.class, Element.class);
+        typeMap.addMappings(mapper -> mapper.using(getElementTypeByCode).map(ElementInput::getElementType, Element::setElementType));
+    }
 
     @Override
     public Element findElementById(Long id) {
@@ -38,12 +50,6 @@ public class ElementServiceImpl implements IElementService {
 
     @Override
     public Element persistElement(ElementInput elementInput) {
-        Converter<String, ElementType> getElementTypeByCode = mappingContext ->
-                elementTypeRepository.findElementTypeByCode(mappingContext.getSource())
-                        .stream()
-                        .findFirst()
-                        .orElse(null);
-        modelMapper.addConverter(getElementTypeByCode);
         return elementRepository.save(
                 modelMapper.map(elementInput, Element.class)
         );
