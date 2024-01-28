@@ -13,6 +13,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
@@ -46,6 +47,7 @@ public class CalculationServiceImpl implements ICalculationService {
     }
 
     @Override
+    @Transactional
     public Calculation calculate(
             List<InputParameterAndElementValue> inputParameterAndElementValueList,
             List<OutputParameterIdAndFormula> outputParameterIdAndFormulaList,

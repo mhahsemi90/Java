@@ -5,8 +5,8 @@ import com.fanap.hcm.core.hcmcore.pcn.repository.service.interfaces.IOutputParam
 import com.fanap.hcm.core.hcmcore.pcn.services.inputs.OutputParameterIdAndFormula;
 import com.fanap.hcm.core.hcmcore.pcn.services.inputs.OutputParameterInput;
 import com.fanap.hcm.core.hcmcore.pcn.services.interfaces.IOutputParameterService;
+import com.fanap.hcm.core.hcmcore.pcn.services.mapper.OutputParameterInputMapper;
 import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -17,12 +17,12 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class OutputParameterServiceImpl implements IOutputParameterService {
     private final IOutputParameterRepository outputParameterRepository;
-    private final ModelMapper modelMapper;
+    private final OutputParameterInputMapper outputParameterInputMapper;
 
     @Override
     public OutputParameter persistOutputParameter(OutputParameterInput outputParameterInput) {
         return outputParameterRepository.save(
-                modelMapper.map(outputParameterInput, OutputParameter.class)
+                outputParameterInputMapper.mapToOutputParameter(outputParameterInput)
         );
     }
 

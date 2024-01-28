@@ -1,0 +1,30 @@
+type InputParameter{
+    id: ID!
+    code: String!
+    title: String!
+    dataType: String!
+    inputElementValueList: [InputElementValue]!
+}
+type InputElementTransaction{
+    id: ID!
+    element: Element!
+    calculation: Calculation!
+    inputElementValueList: [InputElementValue]!
+}
+type InputElementValue{
+    id: ID!
+    data: String!
+    dataType: String!
+    inputParameter: InputParameter!
+    inputElementTransaction: InputElementTransaction!
+}
+input InputParameterInput{
+    code: String!
+    title: String!
+    dataType: String!
+}
+input InputParameterAndElementValue{
+    inputParameterId: ID!
+    elementId: ID!
+    value: String!
+}

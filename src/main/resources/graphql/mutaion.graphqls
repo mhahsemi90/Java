@@ -1,0 +1,11 @@
+type Mutation{
+    persistElement(elementInput: ElementInput!): Element!
+    persistOutputParameter(outputParameterInput: OutputParameterInput!): OutputParameter
+    persistInputParameter(inputParameterInput: InputParameterInput!): InputParameter
+    persistElementType(elementTypeInput: ElementTypeInput!): ElementType
+    calculate(
+        inputParameterAndElementValueList: [InputParameterAndElementValue]!,
+        outputParameterIdAndFormulaList: [OutputParameterIdAndFormula]!,
+        actionDate: String
+    ): Calculation
+}

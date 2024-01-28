@@ -4,12 +4,12 @@ import com.fanap.hcm.core.hcmcore.pcn.repository.entity.Element;
 import com.fanap.hcm.core.hcmcore.pcn.repository.entity.ElementType;
 import com.fanap.hcm.core.hcmcore.pcn.repository.service.interfaces.IElementRepository;
 import com.fanap.hcm.core.hcmcore.pcn.services.inputs.ElementInput;
+import com.fanap.hcm.core.hcmcore.pcn.services.mapper.ElementInputMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.modelmapper.ModelMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,7 @@ class ElementServiceImplTest {
     private IElementRepository elementRepository;
 
     @Mock()
-    private ModelMapper modelMapper;
+    private ElementInputMapper elementInputMapper;
 
     @InjectMocks
     private ElementServiceImpl elementService;
@@ -59,7 +59,7 @@ class ElementServiceImplTest {
         ElementType person = new ElementType(1L, "PERSON", "person", new ArrayList<>());
         Element elementMapped = new Element(null, "Test", person, new ArrayList<>(), new ArrayList<>());
         Element elementPersisted = new Element(1L, "Test", person, new ArrayList<>(), new ArrayList<>());
-        when(modelMapper.map(elementInput, Element.class))
+        when(elementInputMapper.mapToElement(elementInput))
                 .then(invocation -> elementMapped);
         when(elementRepository.save(elementMapped))
                 .then(invocation -> elementPersisted);

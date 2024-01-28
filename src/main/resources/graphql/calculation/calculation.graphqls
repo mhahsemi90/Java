@@ -1,0 +1,6 @@
+type Calculation{
+    id: ID!
+    actionDate: Timestamp!
+    inputElementTransactionList: [InputElementTransaction]!
+    outputElementTransactionList: [OutputElementTransaction]!
+}

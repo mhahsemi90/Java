@@ -1,0 +1,30 @@
+type OutputParameter{
+    id: ID!
+    code: String!
+    title: String!
+    dataType: String!
+    outputElementValueList: [OutputElementValue]!
+}
+type OutputElementTransaction{
+    id: ID!
+    element: Element!
+    calculation: Calculation!
+    outputElementValueList: [OutputElementValue]!
+}
+type OutputElementValue{
+    id: ID!
+    data: String!
+    dataType: String!
+    outputParameter: OutputParameter!
+    outputElementTransaction: OutputElementTransaction!
+}
+input OutputParameterInput{
+    code: String!
+    title: String!
+    dataType: String!
+}
+input OutputParameterIdAndFormula{
+    outputParameterId: ID!
+    elementId: ID!
+    formula: String!
+}

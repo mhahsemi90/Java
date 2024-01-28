@@ -1,0 +1,20 @@
+type ElementType{
+    id: ID!
+    code: String!
+    title: String!
+}
+type Element{
+    id: ID!
+    vrId: String!
+    elementType: ElementType!
+    outputElementTransactionList: [OutputElementTransaction]!
+    inputElementTransactionList: [InputElementTransaction]!
+}
+input ElementTypeInput{
+    code: String!
+    title: String!
+}
+input ElementInput{
+    vrId: String!
+    elementType: String!
+}

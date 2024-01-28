@@ -1,0 +1,5 @@
+type Query {
+    findElementById(id: ID!): Element
+    findElementByVrIdAndByElementType(vrId: String!, elementTypeCode: String!): Element
+    findCalculationById(id: ID!): Calculation
+}
