@@ -48,7 +48,7 @@ class ElementServiceImplTest {
         ElementType person = new ElementType(1L, "PERSON", "person", new ArrayList<>());
         Element foundedElement = new Element(0L, "Test", person, new ArrayList<>(), new ArrayList<>());
         foundedElementList.add(foundedElement);
-        when(elementRepository.findElementByVrIdAndByElementType("Test", person))
+        when(elementRepository.findElementByVrIdAndByElementTypeCode("Test", "PERSON"))
                 .then(invocation -> foundedElementList);
         assertThat(elementService.findElementByVrIdAndByElementType("Test", "PERSON")).isSameAs(foundedElement);
     }

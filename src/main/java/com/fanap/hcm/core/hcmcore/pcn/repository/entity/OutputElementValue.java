@@ -60,4 +60,13 @@ public class OutputElementValue {
             foreignKey = @ForeignKey(name = "output_element_value_output_element_transaction_id_fk")
     )
     private OutputElementTransaction outputElementTransaction;
+
+    @ManyToOne
+    @JoinColumn(
+            name = "formula_id",
+            referencedColumnName = "id",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "output_element_value_formula_id_fk")
+    )
+    private Formula formula;
 }

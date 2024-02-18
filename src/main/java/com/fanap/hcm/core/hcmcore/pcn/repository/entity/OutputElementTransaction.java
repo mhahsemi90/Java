@@ -47,12 +47,13 @@ public class OutputElementTransaction {
     @JoinColumn(
             name = "calculation_id",
             referencedColumnName = "id",
+            nullable = false,
             foreignKey = @ForeignKey(name = "output_element_transaction_calculation_id_fk")
     )
     private Calculation calculation;
 
 
-    @OneToMany(mappedBy = "outputElementTransaction")
+    @OneToMany(mappedBy = "outputElementTransaction", cascade = CascadeType.PERSIST)
     private List<OutputElementValue> outputElementValueList = new ArrayList<>();
 
 }

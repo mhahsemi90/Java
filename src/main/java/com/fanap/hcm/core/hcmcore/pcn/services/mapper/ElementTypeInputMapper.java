@@ -6,6 +6,5 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface ElementTypeInputMapper {
-
     ElementType mapToElementType(ElementTypeInput elementTypeInput);
 }

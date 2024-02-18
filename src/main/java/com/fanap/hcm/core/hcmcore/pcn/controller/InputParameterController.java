@@ -6,6 +6,7 @@ import com.fanap.hcm.core.hcmcore.pcn.services.interfaces.IInputParameterService
 import lombok.AllArgsConstructor;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -16,5 +17,15 @@ public class InputParameterController {
     @MutationMapping
     InputParameter persistInputParameter(@Argument InputParameterInput inputParameterInput) {
         return inputParameterService.persistInputParameter(inputParameterInput);
+    }
+
+    @QueryMapping
+    InputParameter findInputParameterById(@Argument Long id) {
+        return inputParameterService.findInputParameterById(id);
+    }
+
+    @MutationMapping
+    void deleteInputParameterById(@Argument Long id) {
+        inputParameterService.deleteInputParameterById(id);
     }
 }

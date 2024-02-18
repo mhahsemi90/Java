@@ -1,3 +1,10 @@
+type Formula{
+    id: ID!
+    code: String!
+    title: String!
+    formula: String!
+    version: Int!
+}
 type OutputParameter{
     id: ID!
     code: String!
@@ -26,5 +33,10 @@ input OutputParameterInput{
 input OutputParameterIdAndFormula{
     outputParameterId: ID!
     elementId: ID!
+    formulaId: ID!
+}
+input FormulaInput{
+    code: String!
+    title: String!
     formula: String!
 }

@@ -1,5 +1,6 @@
 package com.fanap.hcm.core.hcmcore.pcn.services.interfaces;
 
+import com.fanap.hcm.core.hcmcore.pcn.repository.entity.Formula;
 import com.fanap.hcm.core.hcmcore.pcn.repository.entity.OutputParameter;
 import com.fanap.hcm.core.hcmcore.pcn.services.inputs.OutputParameterIdAndFormula;
 import com.fanap.hcm.core.hcmcore.pcn.services.inputs.OutputParameterInput;
@@ -10,5 +11,9 @@ import java.util.stream.Collector;
 public interface IOutputParameterService {
     OutputParameter persistOutputParameter(OutputParameterInput outputParameterInput);
 
-    Collector<OutputParameterIdAndFormula, ?, Map<OutputParameter, String>> collectOutputInformationToMap();
+    OutputParameter findOutputParameterById(Long id);
+
+    Collector<OutputParameterIdAndFormula, ?, Map<OutputParameter, Formula>> collectOutputInformationToMap();
+
+    void deleterOutputParameterById(Long id);
 }

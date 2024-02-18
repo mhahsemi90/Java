@@ -4,11 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
 @Setter
+@Getter
 @AllArgsConstructor
-public class OutputParameterIdAndFormula {
-    private Long outputParameterId;
-    private Long elementId;
-    private Long formulaId;
+public class FormulaInput {
+    private String code;
+    private String title;
+    private String formula;
 }

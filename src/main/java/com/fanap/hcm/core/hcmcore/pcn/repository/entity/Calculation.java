@@ -41,9 +41,9 @@ public class Calculation {
     )
     private Date actionDate;
 
-    @OneToMany(mappedBy = "calculation")
+    @OneToMany(mappedBy = "calculation", cascade = CascadeType.PERSIST)
     private List<OutputElementTransaction> outputElementTransactionList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "calculation")
+    @OneToMany(mappedBy = "calculation", cascade = CascadeType.PERSIST)
     private List<InputElementTransaction> inputElementTransactionList = new ArrayList<>();
 }

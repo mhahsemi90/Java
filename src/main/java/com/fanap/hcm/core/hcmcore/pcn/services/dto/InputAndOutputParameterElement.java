@@ -1,5 +1,6 @@
 package com.fanap.hcm.core.hcmcore.pcn.services.dto;
 
+import com.fanap.hcm.core.hcmcore.pcn.repository.entity.Formula;
 import com.fanap.hcm.core.hcmcore.pcn.repository.entity.InputParameter;
 import com.fanap.hcm.core.hcmcore.pcn.repository.entity.OutputParameter;
 import lombok.AllArgsConstructor;
@@ -16,5 +17,5 @@ import java.util.Map;
 public class InputAndOutputParameterElement {
     private Long elementId;
     private Map<InputParameter, String> inputParamMapList;
-    private Map<OutputParameter, String> outputParamMapList;
+    private Map<OutputParameter, Formula> outputParamMapList;
 }

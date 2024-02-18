@@ -16,5 +16,5 @@ input ElementTypeInput{
 }
 input ElementInput{
     vrId: String!
-    elementType: String!
+    elementTypeCode: String!
 }

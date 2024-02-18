@@ -47,10 +47,11 @@ public class InputElementTransaction {
     @JoinColumn(
             name = "calculation_id",
             referencedColumnName = "id",
+            nullable = false,
             foreignKey = @ForeignKey(name = "input_element_transaction_calculation_id_fk")
     )
     private Calculation calculation;
 
-    @OneToMany(mappedBy = "inputElementTransaction")
+    @OneToMany(mappedBy = "inputElementTransaction", cascade = CascadeType.PERSIST)
     private List<InputElementValue> inputElementValueList = new ArrayList<>();
 }

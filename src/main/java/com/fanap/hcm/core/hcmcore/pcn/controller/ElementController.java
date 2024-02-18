@@ -14,18 +14,23 @@ import org.springframework.stereotype.Controller;
 public class ElementController {
     private final IElementService elementService;
 
+    @MutationMapping
+    Element persistElement(@Argument ElementInput elementInput) {
+        return elementService.persistElement(elementInput);
+    }
+
     @QueryMapping
     Element findElementById(@Argument Long id) {
         return elementService.findElementById(id);
     }
 
     @QueryMapping
-    Element findElementByVrIdAndByElementType(@Argument String vrId, @Argument String elementType) {
-        return elementService.findElementByVrIdAndByElementType(vrId, elementType);
+    Element findElementByVrIdAndByElementType(@Argument String vrId, @Argument String elementTypeCode) {
+        return elementService.findElementByVrIdAndByElementType(vrId, elementTypeCode);
     }
 
     @MutationMapping
-    Element persistElement(@Argument ElementInput elementInput) {
-        return elementService.persistElement(elementInput);
+    void deleteElementById(@Argument Long id) {
+        elementService.deleteElementById(id);
     }
 }

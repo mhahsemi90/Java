@@ -1,8 +1,15 @@
 type Mutation{
     persistElement(elementInput: ElementInput!): Element!
-    persistOutputParameter(outputParameterInput: OutputParameterInput!): OutputParameter
-    persistInputParameter(inputParameterInput: InputParameterInput!): InputParameter
+    deleteElementById(id: ID!): Boolean
     persistElementType(elementTypeInput: ElementTypeInput!): ElementType
+    deleteElementTypeById(id: ID!): Boolean
+    persistFormula(formulaInput: FormulaInput!): Formula
+    modifyFormulaByCode(code: String!, formula: String!): Formula
+    deleteFormulaById(id: ID!): Boolean
+    persistInputParameter(inputParameterInput: InputParameterInput!): InputParameter
+    deleteInputParameterById(id: ID!): Boolean
+    persistOutputParameter(outputParameterInput: OutputParameterInput!): OutputParameter
+    deleterOutputParameterById(id: ID!): Boolean
     calculate(
         inputParameterAndElementValueList: [InputParameterAndElementValue]!,
         outputParameterIdAndFormulaList: [OutputParameterIdAndFormula]!,

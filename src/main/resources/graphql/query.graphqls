@@ -1,5 +1,13 @@
 type Query {
     findElementById(id: ID!): Element
     findElementByVrIdAndByElementType(vrId: String!, elementTypeCode: String!): Element
+    findElementTypeById(id: ID!): ElementType
+    findElementTypeByCode(code: String!): ElementType
+    findFormulaById(id: ID!): Formula
+    findFormulaByCode(code: String!): [Formula]
+    findFormulaLastVersion(code: String!): Formula
+    findFormulaByCodeAndVersion(code: String!, version: Int!): Formula
+    findInputParameterById(id: ID!): InputParameter
+    findOutputParameterById(id: ID!): OutputParameter
     findCalculationById(id: ID!): Calculation
 }

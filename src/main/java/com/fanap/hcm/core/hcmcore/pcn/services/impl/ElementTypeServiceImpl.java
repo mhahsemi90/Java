@@ -20,4 +20,22 @@ public class ElementTypeServiceImpl implements IElementTypeService {
                 elementTypeInputMapper.mapToElementType(elementTypeInput)
         );
     }
+
+    @Override
+    public ElementType findElementTypeById(Long id) {
+        return elementTypeRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public ElementType findElementTypeByCode(String typeCode) {
+        return elementTypeRepository.findElementTypeByCode(typeCode)
+                .stream()
+                .findFirst()
+                .orElse(null);
+    }
+
+    @Override
+    public void deleteElementTypeById(Long id) {
+        elementTypeRepository.deleteById(id);
+    }
 }

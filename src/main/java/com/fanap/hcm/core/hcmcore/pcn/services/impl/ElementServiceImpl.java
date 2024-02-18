@@ -1,9 +1,7 @@
 package com.fanap.hcm.core.hcmcore.pcn.services.impl;
 
 import com.fanap.hcm.core.hcmcore.pcn.repository.entity.Element;
-import com.fanap.hcm.core.hcmcore.pcn.repository.entity.ElementType;
 import com.fanap.hcm.core.hcmcore.pcn.repository.service.interfaces.IElementRepository;
-import com.fanap.hcm.core.hcmcore.pcn.repository.service.interfaces.IElementTypeRepository;
 import com.fanap.hcm.core.hcmcore.pcn.services.inputs.ElementInput;
 import com.fanap.hcm.core.hcmcore.pcn.services.interfaces.IElementService;
 import com.fanap.hcm.core.hcmcore.pcn.services.mapper.ElementInputMapper;
@@ -15,8 +13,14 @@ import org.springframework.stereotype.Service;
 public class ElementServiceImpl implements IElementService {
 
     private final IElementRepository elementRepository;
-    private final IElementTypeRepository elementTypeRepository;
     private final ElementInputMapper elementInputMapper;
+
+    @Override
+    public Element persistElement(ElementInput elementInput) {
+        return elementRepository.save(
+                elementInputMapper.mapToElement(elementInput)
+        );
+    }
 
     @Override
     public Element findElementById(Long id) {
@@ -25,20 +29,14 @@ public class ElementServiceImpl implements IElementService {
 
     @Override
     public Element findElementByVrIdAndByElementType(String vrId, String elementTypeCode) {
-        ElementType elementType = elementTypeRepository.findElementTypeByCode(elementTypeCode)
-                .stream()
-                .findFirst()
-                .orElse(null);
-        return elementRepository.findElementByVrIdAndByElementType(vrId, elementType)
+        return elementRepository.findElementByVrIdAndByElementTypeCode(vrId, elementTypeCode)
                 .stream()
                 .findFirst()
                 .orElse(null);
     }
 
     @Override
-    public Element persistElement(ElementInput elementInput) {
-        return elementRepository.save(
-                elementInputMapper.mapToElement(elementInput)
-        );
+    public void deleteElementById(Long id) {
+        elementRepository.deleteById(id);
     }
 }

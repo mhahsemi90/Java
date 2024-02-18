@@ -25,9 +25,9 @@ import java.io.StringReader;
 import java.sql.Timestamp;
 import java.util.*;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @AllArgsConstructor
@@ -36,10 +36,10 @@ public class CalculationServiceImpl implements ICalculationService {
     private final IOutputParameterService outputParameterService;
     private final IInputParameterService inputParameterService;
     private final IElementRepository elementRepository;
-    private final IInputElementTransactionRepository inputElementTransactionRepository;
-    private final IOutputElementTransactionRepository outputElementTransactionRepository;
     private final IInputElementValueRepository inputElementValueRepository;
+    private final IInputElementTransactionRepository inputElementTransactionRepository;
     private final IOutputElementValueRepository outputElementValueRepository;
+    private final IOutputElementTransactionRepository outputElementTransactionRepository;
 
     @Override
     public Calculation findCalculationById(Long id) {
@@ -52,27 +52,54 @@ public class CalculationServiceImpl implements ICalculationService {
             List<InputParameterAndElementValue> inputParameterAndElementValueList,
             List<OutputParameterIdAndFormula> outputParameterIdAndFormulaList,
             Timestamp actionDate) {
+        Calculation calculation = persistCalculatedTransaction(
+                new ArrayList<>()
+                , new ArrayList<>()
+                , actionDate);
         List<InputAndOutputParameterElement> inputAndOutputParameterElementList = getCalculationInformation(
                 inputParameterAndElementValueList,
                 outputParameterIdAndFormulaList
         );
-        List<InputElementTransaction> inputElementTransactionList = inputAndOutputParameterElementList
-                .stream()
-                .sequential()
-                .map(this::persistEachInputValue)
-                .collect(Collectors.toList());
-        Stream<CalculatedOutputParameterForElement> calculateForEachElementByOwnParameter = inputAndOutputParameterElementList
+        List<InputElementTransaction> inputElementTransactionList = inputElementTransactionRepository.saveAll(
+                inputAndOutputParameterElementList
+                        .stream()
+                        .parallel()
+                        .map(o -> createInputElementTransactionEachInputValue(o, calculation))
+                        .collect(Collectors.toList())
+        );
+        inputElementValueRepository.saveAll(
+                inputElementTransactionList
+                        .stream()
+                        .parallel()
+                        .map(o -> creatInputParamValue(o, inputAndOutputParameterElementList))
+                        .reduce(new ArrayList<>(), (inputElementValues, inputElementValues2) -> {
+                            inputElementValues2.addAll(inputElementValues);
+                            return inputElementValues2;
+                        })
+        );
+        List<CalculatedOutputParameterForElement> calculateForEachElementByOwnParameter = inputAndOutputParameterElementList
                 .stream()
                 .parallel()
-                .map(this::calculateForEachElementByOwnParameter);
-        List<OutputElementTransaction> outputElementTransactionList = calculateForEachElementByOwnParameter
-                .sequential()
-                .map(this::persistEachOutputCalculatedValue)
+                .map(this::calculateForEachElementByOwnParameter)
                 .collect(Collectors.toList());
-        return persistCalculatedTransaction(
-                inputElementTransactionList
-                , outputElementTransactionList
-                , actionDate);
+        List<OutputElementTransaction> outputElementTransactionList = outputElementTransactionRepository.saveAll(
+                calculateForEachElementByOwnParameter
+                        .stream()
+                        .parallel()
+                        .map(o -> createOutputElementTransactionEachInputValue(o, calculation))
+                        .collect(Collectors.toList())
+        );
+        outputElementValueRepository.saveAll(
+                outputElementTransactionList
+                        .stream()
+                        .parallel()
+                        .map(o -> creatOutputParamValue(o, calculateForEachElementByOwnParameter))
+                        .reduce(new ArrayList<>(), (outputElementValues, outputElementValues1) -> {
+                            outputElementValues1.addAll(outputElementValues);
+                            return outputElementValues1;
+                        })
+        );
+        return calculationRepository.getReferenceById(calculation.getId());
     }
 
     private Calculation persistCalculatedTransaction(
@@ -81,58 +108,83 @@ public class CalculationServiceImpl implements ICalculationService {
             , Timestamp actionDate) {
         Calculation calculation = new Calculation();
         calculation.setActionDate(actionDate);
+        calculation.setInputElementTransactionList(inputElementTransactionList);
+        calculation.setOutputElementTransactionList(outputElementTransactionList);
         calculation = calculationRepository.save(calculation);
-        for (InputElementTransaction o : inputElementTransactionList) {
-            o.setCalculation(calculation);
-            inputElementTransactionRepository.save(o);
-        }
-        for (OutputElementTransaction o : outputElementTransactionList) {
-            o.setCalculation(calculation);
-            outputElementTransactionRepository.save(o);
-        }
         return calculation;
     }
 
-    private OutputElementTransaction persistEachOutputCalculatedValue(CalculatedOutputParameterForElement calculatedOutputParameterForElement) {
-        OutputElementTransaction outputElementTransaction = new OutputElementTransaction();
-        Element element = elementRepository.getReferenceById(calculatedOutputParameterForElement.getElementId());
-        outputElementTransaction.setElement(element);
-        outputElementTransaction = outputElementTransactionRepository.save(outputElementTransaction);
-        calculatedOutputParameterForElement.getOutputParamMapList()
-                .forEach(getBuilderForCreatOutputParamValue(outputElementTransaction));
-        return outputElementTransaction;
+    private OutputElementTransaction createOutputElementTransactionEachInputValue(
+            CalculatedOutputParameterForElement calculatedOutputParameterForElement
+            , Calculation calculation) {
+        return new OutputElementTransaction(
+                null
+                , elementRepository.getReferenceById(calculatedOutputParameterForElement.getElementId())
+                , calculation
+                , new ArrayList<>()
+        );
     }
 
-    private BiConsumer<OutputParameter, String> getBuilderForCreatOutputParamValue(OutputElementTransaction outputElementTransaction) {
-        return (outputParameter, s) ->
-                outputElementValueRepository.save(new OutputElementValue(
-                        null,
-                        s,
-                        outputParameter.getDataType(),
-                        outputParameter,
-                        outputElementTransaction
-                ));
+    private List<OutputElementValue> creatOutputParamValue(
+            OutputElementTransaction outputElementTransaction
+            , List<CalculatedOutputParameterForElement> calculatedOutputParameterForElements
+    ) {
+        List<OutputElementValue> result = new ArrayList<>();
+        calculatedOutputParameterForElements
+                .stream()
+                .filter(o -> outputElementTransaction.getElement().getId().equals(o.getElementId()))
+                .findFirst()
+                .ifPresent(o ->
+                        o.getOutputParamValueMapList()
+                                .forEach((outputParameter, s) ->
+                                        result.add(
+                                                new OutputElementValue(
+                                                        null
+                                                        , s
+                                                        , outputParameter.getDataType()
+                                                        , outputParameter
+                                                        , outputElementTransaction
+                                                        , o.getOutputParamFormulaMapList()
+                                                        .get(outputParameter.getId())
+                                                )
+                                        )
+                                ));
+        return result;
     }
 
-    private InputElementTransaction persistEachInputValue(InputAndOutputParameterElement inputAndOutputParameterElement) {
-        InputElementTransaction inputElementTransaction = new InputElementTransaction();
-        Element element = elementRepository.getReferenceById(inputAndOutputParameterElement.getElementId());
-        inputElementTransaction.setElement(element);
-        inputElementTransaction = inputElementTransactionRepository.save(inputElementTransaction);
-        inputAndOutputParameterElement.getInputParamMapList()
-                .forEach(getBuilderForCreatInputParamValue(inputElementTransaction));
-        return inputElementTransaction;
+    private InputElementTransaction createInputElementTransactionEachInputValue(
+            InputAndOutputParameterElement inputAndOutputParameterElement
+            , Calculation calculation
+    ) {
+        return new InputElementTransaction(
+                null,
+                elementRepository.getReferenceById(inputAndOutputParameterElement.getElementId()),
+                calculation,
+                new ArrayList<>());
     }
 
-    private BiConsumer<InputParameter, String> getBuilderForCreatInputParamValue(InputElementTransaction inputElementTransaction) {
-        return (inputParameter, s) ->
-                inputElementValueRepository.save(new InputElementValue(
-                        null,
-                        s,
-                        inputParameter.getDataType(),
-                        inputParameter,
-                        inputElementTransaction
-                ));
+    private List<InputElementValue> creatInputParamValue(
+            InputElementTransaction inputElementTransaction
+            , List<InputAndOutputParameterElement> inputAndOutputParameterElementList
+    ) {
+        List<InputElementValue> result = new ArrayList<>();
+        inputAndOutputParameterElementList
+                .stream()
+                .filter(o -> inputElementTransaction.getElement().getId().equals(o.getElementId()))
+                .findFirst()
+                .ifPresent(o -> o.getInputParamMapList()
+                        .forEach((inputParameter, s) ->
+                                result.add(
+                                        new InputElementValue(
+                                                null,
+                                                s,
+                                                inputParameter.getDataType(),
+                                                inputParameter,
+                                                inputElementTransaction
+                                        )
+                                ))
+                );
+        return result;
     }
 
     private CalculatedOutputParameterForElement calculateForEachElementByOwnParameter(InputAndOutputParameterElement inputAndOutputParameterElement) {
@@ -142,16 +194,21 @@ public class CalculationServiceImpl implements ICalculationService {
         inputAndOutputParameterElement.getInputParamMapList().forEach(getBuilderToAddInputToFormula(formulaBuilder));
         inputAndOutputParameterElement.getOutputParamMapList().forEach(getBuilderToAddOutputToFormula(formulaBuilder));
         formulaBuilder.append("var _doCalculate = function(){\n").append("var _values = new Map();\n");
-        inputAndOutputParameterElement.getOutputParamMapList().forEach(getBuilderToAddOutputToCalculation(formulaBuilder));
+        inputAndOutputParameterElement.getOutputParamMapList().keySet().forEach(getBuilderToAddOutputToCalculation(formulaBuilder));
         formulaBuilder.append("return JSON.stringify(Object.fromEntries(_values));\n").append("};\n");
-        calculatedOutputParameterForElement.setOutputParamMapList(doCalculationFormulaScript(
+        calculatedOutputParameterForElement.setOutputParamValueMapList(doCalculationFormulaScript(
                 formulaBuilder.toString(),
                 inputAndOutputParameterElement.getOutputParamMapList()
         ));
+        calculatedOutputParameterForElement.setOutputParamFormulaMapList(new LinkedHashMap<>());
+        inputAndOutputParameterElement.getOutputParamMapList().forEach((outputParameter, formula) ->
+                calculatedOutputParameterForElement.getOutputParamFormulaMapList()
+                        .put(outputParameter.getId(), formula)
+        );
         return calculatedOutputParameterForElement;
     }
 
-    private Map<OutputParameter, String> doCalculationFormulaScript(String script, Map<OutputParameter, String> outputParamMapList) {
+    private Map<OutputParameter, String> doCalculationFormulaScript(String script, Map<OutputParameter, Formula> outputParamMapList) {
         Map<Object, Object> outputParamMap = new LinkedHashMap<>();
         Map<OutputParameter, String> outputParameterValueMap = new LinkedHashMap<>();
         try {
@@ -184,18 +241,18 @@ public class CalculationServiceImpl implements ICalculationService {
                         .append(";\n");
     }
 
-    private BiConsumer<OutputParameter, String> getBuilderToAddOutputToFormula(StringBuilder formulaBuilder) {
-        return (outputParameter, s) ->
+    private BiConsumer<OutputParameter, Formula> getBuilderToAddOutputToFormula(StringBuilder formulaBuilder) {
+        return (outputParameter, formula) ->
                 formulaBuilder
                         .append("var getO_")
                         .append(outputParameter.getId())
                         .append(" = function () {\n")
-                        .append(s)
+                        .append(formula.getFormula())
                         .append("};\n");
     }
 
-    private BiConsumer<OutputParameter, String> getBuilderToAddOutputToCalculation(StringBuilder formulaBuilder) {
-        return (outputParameter, s) ->
+    private Consumer<OutputParameter> getBuilderToAddOutputToCalculation(StringBuilder formulaBuilder) {
+        return outputParameter ->
                 formulaBuilder
                         .append("_values.set(\"O_")
                         .append(outputParameter.getId())
