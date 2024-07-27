@@ -21,6 +21,10 @@ import static com.fanap.hcm.core.hcmcore.pcn.services.dto.token.TokenType.NEW_LI
 public interface StatementGenerator {
     Statement generate(List<Token> selectedTokenList, List<Token> tokenList);
 
+    default List<Statement> parsing(String script) {
+        return null;
+    }
+
     default List<Statement> getAllStatementFromTokenList(List<Token> tokenList) {
         List<Statement> allStatementList = new ArrayList<>();
         StatementGenerator generator = new MainStatementGeneratorImpl();
@@ -146,15 +150,17 @@ public interface StatementGenerator {
 
     default Token getFirstTokenThatNotNewLine(List<Token> selectedTokenList) {
         Token token = null;
+        Token newLineToken = null;
         while (CollectionUtils.isNotEmpty(selectedTokenList)) {
-            token = selectedTokenList.remove(0);
-            if (!token.getValue().equals("\n")) {
+            if (selectedTokenList.get(0).getTokenType() != NEW_LINE) {
+                token = selectedTokenList.remove(0);
                 break;
+            } else {
+                newLineToken = selectedTokenList.remove(0);
             }
         }
         if (token == null) {
-            Integer lineNumber = getLineNumber(selectedTokenList);
-            throw new HandledError("Unexpected end of input line:" + lineNumber);
+            return newLineToken;
         }
         return token;
     }
@@ -318,8 +324,8 @@ public interface StatementGenerator {
     default Variable getVariableExpression(List<Token> selectedTokenList, String value) {
         boolean result = false;
         if (StringUtils.isNotBlank(value))
-            result = !value.matches("^[^a-zA-Z_$]|[^a-zA-Z_$0-9]")
-                    && !isVariableKeyword(value);
+            result = value.matches("^[a-zA-Z_$]\\S*")
+                    && value.matches("([a-zA-Z_$0-9])\\w*");
         if (!result)
             this.throwHandledError(selectedTokenList, value);
         return new Variable(value);

@@ -1,5 +1,6 @@
 package com.fanap.hcm.core.hcmcore.pcn.services.dto.expression;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,6 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Expression {
     private ExpressionType type;
+    @JsonIgnore
     private Expression parent;
 
     public Expression(ExpressionType type) {

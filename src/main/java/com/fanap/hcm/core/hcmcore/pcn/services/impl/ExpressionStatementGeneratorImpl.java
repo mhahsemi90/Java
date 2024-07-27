@@ -163,8 +163,11 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
                             }
                             currentExpression = lastExpression;
                         }
-                        case ARRAY_EXPRESSION, CALL_EXPRESSION, LITERAL_EXPRESSION, MEMBER_EXPRESSION, VARIABLE_EXPRESSION ->
-                                lastExpression = getCallExpression(token.getLevel(), lastExpression, selectedTokenList);
+                        case ARRAY_EXPRESSION, CALL_EXPRESSION, LITERAL_EXPRESSION, MEMBER_EXPRESSION, VARIABLE_EXPRESSION -> {
+                            lastExpression = replaceNewExpressionToCurrentExpression(
+                                    lastExpression,
+                                    getCallExpression(token.getLevel(), lastExpression, selectedTokenList));
+                        }
                         case UNARY_EXPRESSION, UPDATE_EXPRESSION -> {
                             OneHandOperatorExpression operatorExpression = (OneHandOperatorExpression) lastExpression;
                             operatorExpression.setArgument(
@@ -378,7 +381,7 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
         }
         verifyExpression(true, currentExpression, selectedTokenList);
         result.setExpression(currentExpression);
-        return result;
+        return currentExpression != null ? result : null;
     }
 
     private Expression getAssignmentExpression(Token currentToken, Expression currentExpression, List<Token> selectedTokenList) {
@@ -596,8 +599,8 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
         if (nextToken.getTokenType() == PUNCTUATOR
                 && getUnaryList().contains(token.getValue())) {
             unaryExpression.setArgument(getUnaryExpression(nextToken, selectedTokenList));
-        } else if (nextToken.getTokenType() == VARIABLE) {
-            unaryExpression.setArgument(getVariableExpression(selectedTokenList, token.getValue()));
+        } else if (nextToken.getTokenType() == VARIABLE || nextToken.getTokenType() == LITERAL) {
+            unaryExpression.setArgument(getVariableExpression(selectedTokenList, nextToken.getValue()));
         } else if (nextToken.getValue().equals("[")) {
             unaryExpression.setArgument(getArrayExpression(nextToken.getLevel(), selectedTokenList));
         } else if (nextToken.getValue().equals("{")) {
@@ -700,11 +703,7 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
             );
         }
         callExpression.setCallVariableName(objectExpression);
-        if (argumentExpressionList.size() == 0) {
-            throwHandledError(selectedTokenList, "(");
-        } else {
-            callExpression.setArgumentList(argumentExpressionList);
-        }
+        callExpression.setArgumentList(argumentExpressionList);
         return callExpression;
     }
 

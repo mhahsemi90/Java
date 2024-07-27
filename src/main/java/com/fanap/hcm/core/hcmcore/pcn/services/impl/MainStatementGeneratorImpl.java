@@ -5,13 +5,16 @@ import com.fanap.hcm.core.hcmcore.pcn.services.dto.token.Token;
 import com.fanap.hcm.core.hcmcore.pcn.services.interfaces.StatementGenerator;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.fanap.hcm.core.hcmcore.pcn.services.dto.token.TokenType.*;
-
+@Service
 public class MainStatementGeneratorImpl implements StatementGenerator {
+
+    @Override
     public List<Statement> parsing(String script) {
         List<Character> characterList = new ArrayList<>();
         for (char c : script.toCharArray()) {
@@ -168,7 +171,16 @@ public class MainStatementGeneratorImpl implements StatementGenerator {
         if (CollectionUtils.isNotEmpty(tokenList)
                 && tokenList.get(tokenList.size() - 1).getTokenType() != NEW_LINE)
             tokenList.add(new Token(NEW_LINE, String.valueOf(lineNumber), 0));
-        return getAllStatementFromTokenList(tokenList);
+        List<Statement> statementList = getAllStatementFromTokenList(tokenList);
+        if(CollectionUtils.isNotEmpty(statementList) &&
+                statementList.get(statementList.size()-1)==null)
+            statementList.remove(statementList.size()-1);
+        return statementList;
+    }
+
+    @Override
+    public List<Statement> getAllStatementFromTokenList(List<Token> tokenList) {
+        return StatementGenerator.super.getAllStatementFromTokenList(tokenList);
     }
 
     @Override
