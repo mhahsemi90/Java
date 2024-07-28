@@ -1,5 +1,6 @@
-package com.fanap.hcm.core.hcmcore.pcn.services.impl;
+package calculation.pcn.services.impl;
 
+import calculation.assertclass.CalculationAssert;
 import calculation.repository.entity.Calculation;
 import calculation.repository.service.interfaces.CalculationRepository;
 import org.junit.jupiter.api.Test;
@@ -13,7 +14,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import static com.fanap.hcm.core.hcmcore.assertclass.CalculationAssert.assertThat;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -28,11 +28,11 @@ class CalculationServiceImplTest {
     void findCalculationByIdTest() {
         when(calculationRepository.findById(0L))
                 .then(invocation -> Optional.empty());
-        assertThat(calculationService.findCalculationById(0L)).isNull();
+        CalculationAssert.assertThat(calculationService.findCalculationById(0L)).isNull();
         Calculation calculation = new Calculation(1L, new Timestamp(System.currentTimeMillis()), new ArrayList<>(), new ArrayList<>());
         when(calculationRepository.findById(1L))
                 .then(invocation -> Optional.of(calculation));
-        assertThat(calculationService.findCalculationById(1L)).isSameAs(calculation);
-        assertThat(calculationService.findCalculationById(1L)).isInstanceOf(Calculation.class);
+        CalculationAssert.assertThat(calculationService.findCalculationById(1L)).isSameAs(calculation);
+        CalculationAssert.assertThat(calculationService.findCalculationById(1L)).isInstanceOf(Calculation.class);
     }
 }

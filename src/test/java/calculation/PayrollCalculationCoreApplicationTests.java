@@ -1,10 +1,10 @@
-package com.fanap.hcm.core.hcmcore;
+package calculation;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class HcmCoreApplicationTests {
+class PayrollCalculationCoreApplicationTests {
 
     @Test
     void contextLoads() {

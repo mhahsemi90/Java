@@ -1,5 +1,6 @@
-package com.fanap.hcm.core.hcmcore.pcn.controller;
+package calculation.pcn.controller;
 
+import calculation.assertclass.CalculationAssert;
 import calculation.controller.CalculationController;
 import calculation.repository.entity.Calculation;
 import calculation.services.impl.CalculationServiceImpl;
@@ -12,7 +13,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
-import static com.fanap.hcm.core.hcmcore.assertclass.CalculationAssert.assertThat;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -28,11 +28,11 @@ class CalculationControllerTest {
     void findCalculationById() {
         when(calculationService.findCalculationById(0L))
                 .then(invocation -> null);
-        assertThat(calculationController.findCalculationById(0L)).isNull();
+        CalculationAssert.assertThat(calculationController.findCalculationById(0L)).isNull();
         Calculation calculation = new Calculation(1L, new Timestamp(System.currentTimeMillis()), new ArrayList<>(), new ArrayList<>());
         when(calculationService.findCalculationById(1L))
                 .then(invocation -> calculation);
-        assertThat(calculationController.findCalculationById(1L)).isSameAs(calculation);
-        assertThat(calculationController.findCalculationById(1L)).isInstanceOf(Calculation.class);
+        CalculationAssert.assertThat(calculationController.findCalculationById(1L)).isSameAs(calculation);
+        CalculationAssert.assertThat(calculationController.findCalculationById(1L)).isInstanceOf(Calculation.class);
     }
 }

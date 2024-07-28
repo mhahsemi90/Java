@@ -1,5 +1,6 @@
-package com.fanap.hcm.core.hcmcore.pcn.services.impl;
+package calculation.pcn.services.impl;
 
+import calculation.assertclass.InputParameterAssert;
 import calculation.repository.entity.InputParameter;
 import calculation.repository.service.interfaces.InputParameterRepository;
 import calculation.services.impl.InputParameterServiceImpl;
@@ -13,7 +14,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 
-import static com.fanap.hcm.core.hcmcore.assertclass.InputParameterAssert.assertThat;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,7 +35,7 @@ class InputParameterServiceImplTest {
                 .then(invocation -> inputParameterMapped);
         when(inputParameterRepository.save(inputParameterMapped))
                 .then(invocation -> inputParameterPersisted);
-        assertThat(inputParameterService.persistInputParameter(inputParameterInput))
+        InputParameterAssert.assertThat(inputParameterService.persistInputParameter(inputParameterInput))
                 .isSameAs(inputParameterPersisted);
     }
 }

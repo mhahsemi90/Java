@@ -1,4 +1,4 @@
-package com.fanap.hcm.core.hcmcore.assertclass;
+package calculation.assertclass;
 
 import calculation.repository.entity.Element;
 import org.assertj.core.api.AbstractAssert;

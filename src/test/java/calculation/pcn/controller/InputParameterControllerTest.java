@@ -1,4 +1,4 @@
-package com.fanap.hcm.core.hcmcore.pcn.controller;
+package calculation.pcn.controller;
 
 import calculation.controller.InputParameterController;
 import calculation.repository.entity.InputParameter;
@@ -12,7 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 
-import static com.fanap.hcm.core.hcmcore.assertclass.InputParameterAssert.assertThat;
+import static calculation.assertclass.InputParameterAssert.assertThat;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)

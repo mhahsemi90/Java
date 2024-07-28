@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class HcmCoreApplication {
+public class PayrollCalculationCoreApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(HcmCoreApplication.class, args);
+        SpringApplication.run(PayrollCalculationCoreApplication.class, args);
     }
 
 }

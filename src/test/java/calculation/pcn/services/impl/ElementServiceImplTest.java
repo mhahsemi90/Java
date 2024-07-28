@@ -1,5 +1,6 @@
-package com.fanap.hcm.core.hcmcore.pcn.services.impl;
+package calculation.pcn.services.impl;
 
+import calculation.assertclass.ElementAssert;
 import calculation.repository.entity.Element;
 import calculation.repository.entity.ElementType;
 import calculation.repository.service.interfaces.ElementRepository;
@@ -16,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.fanap.hcm.core.hcmcore.assertclass.ElementAssert.assertThat;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -34,13 +34,13 @@ class ElementServiceImplTest {
     void findElementById() {
         when(elementRepository.findById(0L))
                 .then(invocation -> Optional.empty());
-        assertThat(elementService.findElementById(0L)).isEqualTo(null);
+        ElementAssert.assertThat(elementService.findElementById(0L)).isEqualTo(null);
         ElementType person = new ElementType(1L, "PERSON", "person", new ArrayList<>());
         Element foundedElement = new Element(1L, "Test", person, new ArrayList<>(), new ArrayList<>());
         when(elementRepository.findById(1L))
                 .then(invocation -> Optional.of(foundedElement));
-        assertThat(elementService.findElementById(1L)).isInstanceOf(Element.class);
-        assertThat(elementService.findElementById(1L)).isSameAs(foundedElement);
+        ElementAssert.assertThat(elementService.findElementById(1L)).isInstanceOf(Element.class);
+        ElementAssert.assertThat(elementService.findElementById(1L)).isSameAs(foundedElement);
     }
 
     @Test
@@ -51,7 +51,7 @@ class ElementServiceImplTest {
         foundedElementList.add(foundedElement);
         when(elementRepository.findElementByVrIdAndByElementTypeCode("Test", "PERSON"))
                 .then(invocation -> foundedElementList);
-        assertThat(elementService.findElementByVrIdAndByElementType("Test", "PERSON")).isSameAs(foundedElement);
+        ElementAssert.assertThat(elementService.findElementByVrIdAndByElementType("Test", "PERSON")).isSameAs(foundedElement);
     }
 
     @Test
@@ -64,6 +64,6 @@ class ElementServiceImplTest {
                 .then(invocation -> elementMapped);
         when(elementRepository.save(elementMapped))
                 .then(invocation -> elementPersisted);
-        assertThat(elementService.persistElement(elementInput)).isSameAs(elementPersisted);
+        ElementAssert.assertThat(elementService.persistElement(elementInput)).isSameAs(elementPersisted);
     }
 }
