@@ -5,7 +5,7 @@ import calculation.services.inputs.FormulaInput;
 
 import java.util.List;
 
-public interface IFormulaService {
+public interface FormulaService {
     Formula persistFormula(FormulaInput formulaInput);
 
     Formula findFormulaById(Long id);

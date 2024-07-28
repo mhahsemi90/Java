@@ -1,10 +1,10 @@
 package calculation.services.impl;
 
 import calculation.repository.entity.InputParameter;
-import calculation.repository.service.interfaces.IInputParameterRepository;
+import calculation.repository.service.interfaces.InputParameterRepository;
 import calculation.services.inputs.InputParameterAndElementValue;
 import calculation.services.inputs.InputParameterInput;
-import calculation.services.interfaces.IInputParameterService;
+import calculation.services.interfaces.InputParameterService;
 import calculation.services.mapper.InputParameterInputMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,8 +15,8 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class InputParameterServiceImpl implements IInputParameterService {
-    private final IInputParameterRepository inputParameterRepository;
+public class InputParameterServiceImpl implements InputParameterService {
+    private final InputParameterRepository inputParameterRepository;
     private final InputParameterInputMapper inputParameterInputMapper;
 
     @Override

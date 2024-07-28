@@ -7,7 +7,7 @@ import calculation.services.inputs.OutputParameterIdAndFormula;
 import java.sql.Timestamp;
 import java.util.List;
 
-public interface ICalculationService {
+public interface CalculationService {
     Calculation findCalculationById(Long id);
 
     Calculation calculate(

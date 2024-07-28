@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface IElementRepository extends JpaRepository<Element, Long> {
+public interface ElementRepository extends JpaRepository<Element, Long> {
 
     @Query(
             value = "select e from Element e where e.vrId = :vrId and e.elementType.code = :elementTypeCode"

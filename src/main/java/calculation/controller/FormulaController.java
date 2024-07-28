@@ -2,7 +2,7 @@ package calculation.controller;
 
 import calculation.repository.entity.Formula;
 import calculation.services.inputs.FormulaInput;
-import calculation.services.interfaces.IFormulaService;
+import calculation.services.interfaces.FormulaService;
 import lombok.AllArgsConstructor;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -14,40 +14,40 @@ import java.util.List;
 @Controller
 @AllArgsConstructor
 public class FormulaController {
-    private IFormulaService formulaService;
+    private FormulaService formulaService;
 
     @MutationMapping
-    Formula persistFormula(@Argument FormulaInput formulaInput) {
+    public Formula persistFormula(@Argument FormulaInput formulaInput) {
         return formulaService.persistFormula(formulaInput);
     }
 
     @QueryMapping
-    Formula findFormulaById(@Argument Long id) {
+    public Formula findFormulaById(@Argument Long id) {
         return formulaService.findFormulaById(id);
     }
 
     @QueryMapping
-    List<Formula> findFormulaByCode(@Argument String code) {
+    public List<Formula> findFormulaByCode(@Argument String code) {
         return formulaService.findFormulaByCode(code);
     }
 
     @QueryMapping
-    Formula findFormulaLastVersion(@Argument String code) {
+    public Formula findFormulaLastVersion(@Argument String code) {
         return formulaService.findFormulaLastVersion(code);
     }
 
     @QueryMapping
-    Formula findFormulaByCodeAndVersion(@Argument String code, @Argument Long version) {
+    public Formula findFormulaByCodeAndVersion(@Argument String code, @Argument Long version) {
         return formulaService.findFormulaByCodeAndVersion(code, version);
     }
 
     @MutationMapping
-    Formula modifyFormulaByCode(@Argument String code, @Argument String formula) {
+    public Formula modifyFormulaByCode(@Argument String code, @Argument String formula) {
         return formulaService.modifyFormulaByCode(code, formula);
     }
 
     @MutationMapping
-    Boolean deleteFormulaById(@Argument Long id) {
+    public Boolean deleteFormulaById(@Argument Long id) {
         formulaService.deleteFormulaById(id);
         return true;
     }

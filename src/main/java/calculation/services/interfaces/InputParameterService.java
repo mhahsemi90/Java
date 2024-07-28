@@ -7,7 +7,7 @@ import calculation.services.inputs.InputParameterInput;
 import java.util.Map;
 import java.util.stream.Collector;
 
-public interface IInputParameterService {
+public interface InputParameterService {
     InputParameter persistInputParameter(InputParameterInput inputParameterInput);
 
     InputParameter findInputParameterById(Long id);

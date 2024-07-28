@@ -1,17 +1,17 @@
 package calculation.services.impl;
 
 import calculation.repository.entity.ElementType;
-import calculation.repository.service.interfaces.IElementTypeRepository;
+import calculation.repository.service.interfaces.ElementTypeRepository;
 import calculation.services.inputs.ElementTypeInput;
-import calculation.services.interfaces.IElementTypeService;
+import calculation.services.interfaces.ElementTypeService;
 import calculation.services.mapper.ElementTypeInputMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class ElementTypeServiceImpl implements IElementTypeService {
-    private final IElementTypeRepository elementTypeRepository;
+public class ElementTypeServiceImpl implements ElementTypeService {
+    private final ElementTypeRepository elementTypeRepository;
     private final ElementTypeInputMapper elementTypeInputMapper;
 
     @Override

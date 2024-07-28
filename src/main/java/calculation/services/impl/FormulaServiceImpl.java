@@ -1,9 +1,9 @@
 package calculation.services.impl;
 
 import calculation.repository.entity.Formula;
-import calculation.repository.service.interfaces.IFormulaRepository;
+import calculation.repository.service.interfaces.FormulaRepository;
 import calculation.services.inputs.FormulaInput;
-import calculation.services.interfaces.IFormulaService;
+import calculation.services.interfaces.FormulaService;
 import calculation.services.mapper.FormulaMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,8 +13,8 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class FormulaServiceImpl implements IFormulaService {
-    IFormulaRepository formulaRepository;
+public class FormulaServiceImpl implements FormulaService {
+    FormulaRepository formulaRepository;
     FormulaMapper formulaMapper;
 
     @Override

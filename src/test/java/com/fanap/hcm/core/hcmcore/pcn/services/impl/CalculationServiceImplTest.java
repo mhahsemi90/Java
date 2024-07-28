@@ -1,7 +1,7 @@
 package com.fanap.hcm.core.hcmcore.pcn.services.impl;
 
 import calculation.repository.entity.Calculation;
-import calculation.repository.service.interfaces.ICalculationRepository;
+import calculation.repository.service.interfaces.CalculationRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class CalculationServiceImplTest {
     @Mock
-    private ICalculationRepository calculationRepository;
+    private CalculationRepository calculationRepository;
 
     @InjectMocks
     private CalculationServiceImpl calculationService;

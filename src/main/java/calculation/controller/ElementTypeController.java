@@ -2,7 +2,7 @@ package calculation.controller;
 
 import calculation.repository.entity.ElementType;
 import calculation.services.inputs.ElementTypeInput;
-import calculation.services.interfaces.IElementTypeService;
+import calculation.services.interfaces.ElementTypeService;
 import lombok.AllArgsConstructor;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Controller;
 @Controller
 @AllArgsConstructor
 public class ElementTypeController {
-    private final IElementTypeService elementTypeService;
+    private final ElementTypeService elementTypeService;
 
     @MutationMapping
     public ElementType persistElementType(@Argument ElementTypeInput elementTypeInput) {

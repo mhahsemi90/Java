@@ -2,7 +2,7 @@ package calculation.controller;
 
 import calculation.repository.entity.OutputParameter;
 import calculation.services.inputs.OutputParameterInput;
-import calculation.services.interfaces.IOutputParameterService;
+import calculation.services.interfaces.OutputParameterService;
 import lombok.AllArgsConstructor;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -12,20 +12,20 @@ import org.springframework.stereotype.Controller;
 @Controller
 @AllArgsConstructor
 public class OutputParameterController {
-    private final IOutputParameterService outputParameterService;
+    private final OutputParameterService outputParameterService;
 
     @MutationMapping
-    OutputParameter persistOutputParameter(@Argument OutputParameterInput outputParameterInput) {
+    public OutputParameter persistOutputParameter(@Argument OutputParameterInput outputParameterInput) {
         return outputParameterService.persistOutputParameter(outputParameterInput);
     }
 
     @QueryMapping
-    OutputParameter findOutputParameterById(@Argument Long id) {
+    public OutputParameter findOutputParameterById(@Argument Long id) {
         return outputParameterService.findOutputParameterById(id);
     }
 
     @MutationMapping
-    void deleterOutputParameterById(@Argument Long id) {
+    public void deleterOutputParameterById(@Argument Long id) {
         outputParameterService.deleterOutputParameterById(id);
     }
 }

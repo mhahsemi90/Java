@@ -2,11 +2,11 @@ package calculation.services.impl;
 
 import calculation.repository.entity.Formula;
 import calculation.repository.entity.OutputParameter;
-import calculation.repository.service.interfaces.IFormulaRepository;
-import calculation.repository.service.interfaces.IOutputParameterRepository;
+import calculation.repository.service.interfaces.FormulaRepository;
+import calculation.repository.service.interfaces.OutputParameterRepository;
 import calculation.services.inputs.OutputParameterIdAndFormula;
 import calculation.services.inputs.OutputParameterInput;
-import calculation.services.interfaces.IOutputParameterService;
+import calculation.services.interfaces.OutputParameterService;
 import calculation.services.mapper.OutputParameterInputMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,9 +17,9 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class OutputParameterServiceImpl implements IOutputParameterService {
-    private final IFormulaRepository formulaRepository;
-    private final IOutputParameterRepository outputParameterRepository;
+public class OutputParameterServiceImpl implements OutputParameterService {
+    private final FormulaRepository formulaRepository;
+    private final OutputParameterRepository outputParameterRepository;
     private final OutputParameterInputMapper outputParameterInputMapper;
 
     @Override

@@ -3,7 +3,7 @@ package com.fanap.hcm.core.hcmcore.pcn.controller;
 import calculation.controller.InputParameterController;
 import calculation.repository.entity.InputParameter;
 import calculation.services.inputs.InputParameterInput;
-import calculation.services.interfaces.IInputParameterService;
+import calculation.services.interfaces.InputParameterService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 class InputParameterControllerTest {
 
     @Mock
-    IInputParameterService inputParameterService;
+    InputParameterService inputParameterService;
 
     @InjectMocks
     InputParameterController inputParameterController;

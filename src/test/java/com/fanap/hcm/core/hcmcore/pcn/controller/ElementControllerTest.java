@@ -4,7 +4,7 @@ import calculation.controller.ElementController;
 import calculation.repository.entity.Element;
 import calculation.repository.entity.ElementType;
 import calculation.services.inputs.ElementInput;
-import calculation.services.interfaces.IElementService;
+import calculation.services.interfaces.ElementService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.when;
 class ElementControllerTest {
 
     @Mock
-    IElementService elementService;
+    ElementService elementService;
 
 
     @InjectMocks

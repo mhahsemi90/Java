@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface IFormulaRepository extends JpaRepository<Formula, Long> {
+public interface FormulaRepository extends JpaRepository<Formula, Long> {
 
     @Query("select f from Formula f where f.code = :code")
     List<Formula> findFormulaByCode(@Param("code") String code);

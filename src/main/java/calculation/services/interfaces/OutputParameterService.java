@@ -8,7 +8,7 @@ import calculation.services.inputs.OutputParameterInput;
 import java.util.Map;
 import java.util.stream.Collector;
 
-public interface IOutputParameterService {
+public interface OutputParameterService {
     OutputParameter persistOutputParameter(OutputParameterInput outputParameterInput);
 
     OutputParameter findOutputParameterById(Long id);

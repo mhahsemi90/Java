@@ -3,7 +3,7 @@ package calculation.services.interfaces;
 import calculation.repository.entity.Element;
 import calculation.services.inputs.ElementInput;
 
-public interface IElementService {
+public interface ElementService {
     Element persistElement(ElementInput elementInput);
 
     Element findElementById(Long id);

@@ -4,6 +4,6 @@ import calculation.services.dto.statement.Statement;
 
 import java.util.List;
 
-public interface IParsingScriptService {
+public interface ParsingScriptService {
     List<Statement> parsing(String script);
 }

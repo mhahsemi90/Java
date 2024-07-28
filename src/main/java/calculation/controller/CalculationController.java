@@ -3,7 +3,7 @@ package calculation.controller;
 import calculation.repository.entity.Calculation;
 import calculation.services.inputs.InputParameterAndElementValue;
 import calculation.services.inputs.OutputParameterIdAndFormula;
-import calculation.services.interfaces.ICalculationService;
+import calculation.services.interfaces.CalculationService;
 import lombok.AllArgsConstructor;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -16,7 +16,7 @@ import java.util.List;
 @Controller
 @AllArgsConstructor
 public class CalculationController {
-    private final ICalculationService calculationService;
+    private final CalculationService calculationService;
 
     @QueryMapping
     public Calculation findCalculationById(@Argument Long id) {

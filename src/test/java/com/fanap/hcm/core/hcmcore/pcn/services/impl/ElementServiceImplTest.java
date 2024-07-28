@@ -2,7 +2,7 @@ package com.fanap.hcm.core.hcmcore.pcn.services.impl;
 
 import calculation.repository.entity.Element;
 import calculation.repository.entity.ElementType;
-import calculation.repository.service.interfaces.IElementRepository;
+import calculation.repository.service.interfaces.ElementRepository;
 import calculation.services.impl.ElementServiceImpl;
 import calculation.services.inputs.ElementInput;
 import calculation.services.mapper.ElementInputMapper;
@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class ElementServiceImplTest {
     @Mock
-    private IElementRepository elementRepository;
+    private ElementRepository elementRepository;
 
     @Mock()
     private ElementInputMapper elementInputMapper;

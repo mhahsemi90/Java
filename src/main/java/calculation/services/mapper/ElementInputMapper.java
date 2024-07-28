@@ -2,7 +2,7 @@ package calculation.services.mapper;
 
 import calculation.repository.entity.Element;
 import calculation.repository.entity.ElementType;
-import calculation.repository.service.interfaces.IElementTypeRepository;
+import calculation.repository.service.interfaces.ElementTypeRepository;
 import calculation.services.inputs.ElementInput;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public abstract class ElementInputMapper {
 
     @Autowired
-    protected IElementTypeRepository elementTypeRepository;
+    protected ElementTypeRepository elementTypeRepository;
 
     @Mapping(
             target = "elementType",

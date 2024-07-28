@@ -1,7 +1,7 @@
 package com.fanap.hcm.core.hcmcore.pcn.services.impl;
 
 import calculation.repository.entity.OutputParameter;
-import calculation.repository.service.interfaces.IOutputParameterRepository;
+import calculation.repository.service.interfaces.OutputParameterRepository;
 import calculation.services.impl.OutputParameterServiceImpl;
 import calculation.services.inputs.OutputParameterInput;
 import calculation.services.mapper.OutputParameterInputMapper;
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class OutputParameterServiceImplTest {
     @Mock
-    private IOutputParameterRepository outputParameterRepository;
+    private OutputParameterRepository outputParameterRepository;
     @Mock
     private OutputParameterInputMapper outputParameterInputMapper;
     @InjectMocks

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface IElementTypeRepository extends JpaRepository<ElementType, Long> {
+public interface ElementTypeRepository extends JpaRepository<ElementType, Long> {
 
     @Query(value = "select et from ElementType et where et.code = :code")
     List<ElementType> findElementTypeByCode(@Param("code") String code);
