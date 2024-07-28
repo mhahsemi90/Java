@@ -1,9 +1,10 @@
 package com.fanap.hcm.core.hcmcore.pcn.services.impl;
 
-import com.fanap.hcm.core.hcmcore.pcn.repository.entity.OutputParameter;
-import com.fanap.hcm.core.hcmcore.pcn.repository.service.interfaces.IOutputParameterRepository;
-import com.fanap.hcm.core.hcmcore.pcn.services.inputs.OutputParameterInput;
-import com.fanap.hcm.core.hcmcore.pcn.services.mapper.OutputParameterInputMapper;
+import calculation.repository.entity.OutputParameter;
+import calculation.repository.service.interfaces.IOutputParameterRepository;
+import calculation.services.impl.OutputParameterServiceImpl;
+import calculation.services.inputs.OutputParameterInput;
+import calculation.services.mapper.OutputParameterInputMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

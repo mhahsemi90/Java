@@ -1,9 +1,10 @@
 package com.fanap.hcm.core.hcmcore.pcn.controller;
 
-import com.fanap.hcm.core.hcmcore.pcn.repository.entity.Element;
-import com.fanap.hcm.core.hcmcore.pcn.repository.entity.ElementType;
-import com.fanap.hcm.core.hcmcore.pcn.services.inputs.ElementInput;
-import com.fanap.hcm.core.hcmcore.pcn.services.interfaces.IElementService;
+import calculation.controller.ElementController;
+import calculation.repository.entity.Element;
+import calculation.repository.entity.ElementType;
+import calculation.services.inputs.ElementInput;
+import calculation.services.interfaces.IElementService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

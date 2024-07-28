@@ -1,7 +1,8 @@
 package com.fanap.hcm.core.hcmcore.pcn.controller;
 
-import com.fanap.hcm.core.hcmcore.pcn.repository.entity.Calculation;
-import com.fanap.hcm.core.hcmcore.pcn.services.impl.CalculationServiceImpl;
+import calculation.controller.CalculationController;
+import calculation.repository.entity.Calculation;
+import calculation.services.impl.CalculationServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

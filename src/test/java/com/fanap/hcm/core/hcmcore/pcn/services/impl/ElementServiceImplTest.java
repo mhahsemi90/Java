@@ -1,10 +1,11 @@
 package com.fanap.hcm.core.hcmcore.pcn.services.impl;
 
-import com.fanap.hcm.core.hcmcore.pcn.repository.entity.Element;
-import com.fanap.hcm.core.hcmcore.pcn.repository.entity.ElementType;
-import com.fanap.hcm.core.hcmcore.pcn.repository.service.interfaces.IElementRepository;
-import com.fanap.hcm.core.hcmcore.pcn.services.inputs.ElementInput;
-import com.fanap.hcm.core.hcmcore.pcn.services.mapper.ElementInputMapper;
+import calculation.repository.entity.Element;
+import calculation.repository.entity.ElementType;
+import calculation.repository.service.interfaces.IElementRepository;
+import calculation.services.impl.ElementServiceImpl;
+import calculation.services.inputs.ElementInput;
+import calculation.services.mapper.ElementInputMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

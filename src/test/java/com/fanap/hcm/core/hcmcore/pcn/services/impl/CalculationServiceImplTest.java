@@ -1,12 +1,13 @@
 package com.fanap.hcm.core.hcmcore.pcn.services.impl;
 
-import com.fanap.hcm.core.hcmcore.pcn.repository.entity.Calculation;
-import com.fanap.hcm.core.hcmcore.pcn.repository.service.interfaces.ICalculationRepository;
+import calculation.repository.entity.Calculation;
+import calculation.repository.service.interfaces.ICalculationRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import calculation.services.impl.CalculationServiceImpl;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;

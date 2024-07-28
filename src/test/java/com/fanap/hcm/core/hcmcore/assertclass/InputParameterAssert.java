@@ -1,6 +1,6 @@
 package com.fanap.hcm.core.hcmcore.assertclass;
 
-import com.fanap.hcm.core.hcmcore.pcn.repository.entity.InputParameter;
+import calculation.repository.entity.InputParameter;
 import org.assertj.core.api.AbstractAssert;
 
 public class InputParameterAssert extends AbstractAssert<InputParameterAssert, InputParameter> {

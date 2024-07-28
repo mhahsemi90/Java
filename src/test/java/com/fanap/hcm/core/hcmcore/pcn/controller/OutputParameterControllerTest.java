@@ -1,8 +1,9 @@
 package com.fanap.hcm.core.hcmcore.pcn.controller;
 
-import com.fanap.hcm.core.hcmcore.pcn.repository.entity.OutputParameter;
-import com.fanap.hcm.core.hcmcore.pcn.services.inputs.OutputParameterInput;
-import com.fanap.hcm.core.hcmcore.pcn.services.interfaces.IOutputParameterService;
+import calculation.controller.OutputParameterController;
+import calculation.repository.entity.OutputParameter;
+import calculation.services.inputs.OutputParameterInput;
+import calculation.services.interfaces.IOutputParameterService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
