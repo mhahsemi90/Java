@@ -17,7 +17,7 @@ public abstract class ElementInputMapper {
 
     @Mapping(
             target = "elementType",
-            source = "elementType",
+            source = "elementTypeCode",
             qualifiedByName = "findElementTypeByCode")
     public abstract Element mapToElement(ElementInput elementInput);
 

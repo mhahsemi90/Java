@@ -10,5 +10,5 @@ import lombok.Setter;
 public class ElementInput {
     private Long id;
     private String vrId;
-    private String elementType;
+    private String elementTypeCode;
 }

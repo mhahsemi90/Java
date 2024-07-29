@@ -1,6 +1,7 @@
 package calculation.controller;
 
 import calculation.repository.entity.Calculation;
+import calculation.services.dto.entity.CalculationDto;
 import calculation.services.inputs.InputParameterAndElementValue;
 import calculation.services.inputs.OutputParameterIdAndFormula;
 import calculation.services.interfaces.CalculationService;
@@ -19,12 +20,12 @@ public class CalculationController {
     private final CalculationService calculationService;
 
     @QueryMapping
-    public Calculation findCalculationById(@Argument Long id) {
+    public CalculationDto findCalculationById(@Argument Long id) {
         return calculationService.findCalculationById(id);
     }
 
     @MutationMapping
-    public Calculation calculate(
+    public CalculationDto calculate(
             @Argument List<InputParameterAndElementValue> inputParameterAndElementValueList,
             @Argument List<OutputParameterIdAndFormula> outputParameterIdAndFormulaList,
             @Argument String actionDate) {

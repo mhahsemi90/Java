@@ -2,9 +2,11 @@ package calculation.services.impl;
 
 import calculation.repository.entity.InputParameter;
 import calculation.repository.service.interfaces.InputParameterRepository;
+import calculation.services.dto.entity.InputParameterDto;
 import calculation.services.inputs.InputParameterAndElementValue;
 import calculation.services.inputs.InputParameterInput;
 import calculation.services.interfaces.InputParameterService;
+import calculation.services.mapper.InputParameterDtoMapper;
 import calculation.services.mapper.InputParameterInputMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,7 @@ import java.util.stream.Collectors;
 public class InputParameterServiceImpl implements InputParameterService {
     private final InputParameterRepository inputParameterRepository;
     private final InputParameterInputMapper inputParameterInputMapper;
+    private final InputParameterDtoMapper inputParameterDtoMapper;
 
     @Override
     public InputParameter persistInputParameter(InputParameterInput inputParameterInput) {
@@ -32,10 +35,16 @@ public class InputParameterServiceImpl implements InputParameterService {
     }
 
     @Override
-    public Collector<InputParameterAndElementValue, ?, Map<InputParameter, String>> collectInputInformationToMap() {
+    public Collector<InputParameterAndElementValue, ?, Map<InputParameterDto, String>> collectInputInformationToMap() {
         return Collectors.toMap(
                 inputParameterAndElementValue ->
-                        inputParameterRepository.getReferenceById(inputParameterAndElementValue.getInputParameterId())
+                        inputParameterDtoMapper
+                                .mapToInputParameterDto(
+                                        inputParameterRepository
+                                                .getReferenceById(
+                                                        inputParameterAndElementValue.getInputParameterId()
+                                                )
+                                )
                 , InputParameterAndElementValue::getValue
         );
     }

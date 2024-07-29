@@ -1,7 +1,8 @@
 package calculation.services.dto;
 
 import calculation.repository.entity.Formula;
-import calculation.repository.entity.OutputParameter;
+import calculation.services.dto.entity.FormulaDto;
+import calculation.services.dto.entity.OutputParameterDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,6 @@ import java.util.Map;
 @NoArgsConstructor
 public class CalculatedOutputParameterForElement {
     private Long elementId;
-    private Map<OutputParameter, String> outputParamValueMapList;
-    private Map<Long, Formula> outputParamFormulaMapList;
+    private Map<OutputParameterDto, String> outputParamValueMapList;
+    private Map<Long, FormulaDto> outputParamFormulaMapList;
 }

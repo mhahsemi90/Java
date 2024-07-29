@@ -1,6 +1,7 @@
 package calculation.services.interfaces;
 
 import calculation.repository.entity.Calculation;
+import calculation.services.dto.entity.CalculationDto;
 import calculation.services.inputs.InputParameterAndElementValue;
 import calculation.services.inputs.OutputParameterIdAndFormula;
 
@@ -8,9 +9,9 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public interface CalculationService {
-    Calculation findCalculationById(Long id);
+    CalculationDto findCalculationById(Long id);
 
-    Calculation calculate(
+    CalculationDto calculate(
             List<InputParameterAndElementValue> inputParameterAndElementValueList,
             List<OutputParameterIdAndFormula> outputParameterIdAndFormulaList,
             Timestamp actionDate);

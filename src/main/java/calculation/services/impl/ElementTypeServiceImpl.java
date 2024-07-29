@@ -4,6 +4,7 @@ import calculation.repository.entity.ElementType;
 import calculation.repository.service.interfaces.ElementTypeRepository;
 import calculation.services.inputs.ElementTypeInput;
 import calculation.services.interfaces.ElementTypeService;
+import calculation.services.mapper.ElementTypeDtoMapper;
 import calculation.services.mapper.ElementTypeInputMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,11 +14,18 @@ import org.springframework.stereotype.Service;
 public class ElementTypeServiceImpl implements ElementTypeService {
     private final ElementTypeRepository elementTypeRepository;
     private final ElementTypeInputMapper elementTypeInputMapper;
+    private final ElementTypeDtoMapper elementTypeDtoMapper;
 
     @Override
     public ElementType persistElementType(ElementTypeInput elementTypeInput) {
         return elementTypeRepository.save(
-                elementTypeInputMapper.mapToElementType(elementTypeInput)
+                elementTypeDtoMapper
+                        .mapToElementType(
+                                elementTypeInputMapper
+                                        .mapToElementTypeDto(
+                                                elementTypeInput
+                                        )
+                        )
         );
     }
 

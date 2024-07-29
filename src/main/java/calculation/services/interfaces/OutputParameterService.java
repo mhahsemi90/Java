@@ -2,6 +2,8 @@ package calculation.services.interfaces;
 
 import calculation.repository.entity.Formula;
 import calculation.repository.entity.OutputParameter;
+import calculation.services.dto.entity.FormulaDto;
+import calculation.services.dto.entity.OutputParameterDto;
 import calculation.services.inputs.OutputParameterIdAndFormula;
 import calculation.services.inputs.OutputParameterInput;
 
@@ -13,7 +15,7 @@ public interface OutputParameterService {
 
     OutputParameter findOutputParameterById(Long id);
 
-    Collector<OutputParameterIdAndFormula, ?, Map<OutputParameter, Formula>> collectOutputInformationToMap();
+    Collector<OutputParameterIdAndFormula, ?, Map<OutputParameterDto, FormulaDto>> collectOutputInformationToMap();
 
     void deleterOutputParameterById(Long id);
 }

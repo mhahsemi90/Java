@@ -1,12 +1,15 @@
 package calculation.services.impl;
 
-import calculation.repository.entity.Formula;
 import calculation.repository.entity.OutputParameter;
 import calculation.repository.service.interfaces.FormulaRepository;
 import calculation.repository.service.interfaces.OutputParameterRepository;
+import calculation.services.dto.entity.FormulaDto;
+import calculation.services.dto.entity.OutputParameterDto;
 import calculation.services.inputs.OutputParameterIdAndFormula;
 import calculation.services.inputs.OutputParameterInput;
 import calculation.services.interfaces.OutputParameterService;
+import calculation.services.mapper.FormulaDtoMapper;
+import calculation.services.mapper.OutputParameterDtoMapper;
 import calculation.services.mapper.OutputParameterInputMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +24,8 @@ public class OutputParameterServiceImpl implements OutputParameterService {
     private final FormulaRepository formulaRepository;
     private final OutputParameterRepository outputParameterRepository;
     private final OutputParameterInputMapper outputParameterInputMapper;
+    private final OutputParameterDtoMapper outputParameterDtoMapper;
+    private final FormulaDtoMapper formulaDtoMapper;
 
     @Override
     public OutputParameter persistOutputParameter(OutputParameterInput outputParameterInput) {
@@ -35,12 +40,24 @@ public class OutputParameterServiceImpl implements OutputParameterService {
     }
 
     @Override
-    public Collector<OutputParameterIdAndFormula, ?, Map<OutputParameter, Formula>> collectOutputInformationToMap() {
+    public Collector<OutputParameterIdAndFormula, ?, Map<OutputParameterDto, FormulaDto>> collectOutputInformationToMap() {
         return Collectors.toMap(
                 outputParameterIdAndFormula ->
-                        outputParameterRepository.getReferenceById(outputParameterIdAndFormula.getOutputParameterId())
+                        outputParameterDtoMapper
+                                .mapToOutputParameterDto(
+                                        outputParameterRepository
+                                                .getReferenceById(
+                                                        outputParameterIdAndFormula.getOutputParameterId()
+                                                )
+                                )
                 , outputParameterIdAndFormula ->
-                        formulaRepository.findById(outputParameterIdAndFormula.getFormulaId()).orElse(null)
+                        formulaDtoMapper
+                                .mapToFormulaDto(
+                                        formulaRepository
+                                                .findById(
+                                                        outputParameterIdAndFormula.getFormulaId()
+                                                ).orElse(null)
+                                )
         );
     }
 

@@ -1,19 +1,21 @@
 package calculation.services.impl;
 
-import calculation.repository.entity.*;
-import calculation.repository.service.interfaces.*;
+import calculation.repository.service.interfaces.CalculationRepository;
+import calculation.repository.service.interfaces.ElementRepository;
 import calculation.services.dto.CalculatedOutputParameterForElement;
 import calculation.services.dto.InputAndOutputParameterElement;
+import calculation.services.dto.entity.*;
 import calculation.services.inputs.InputParameterAndElementValue;
 import calculation.services.inputs.OutputParameterIdAndFormula;
 import calculation.services.interfaces.CalculationService;
+import calculation.services.interfaces.ElementService;
 import calculation.services.interfaces.InputParameterService;
 import calculation.services.interfaces.OutputParameterService;
+import calculation.services.mapper.CalculationDtoMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
@@ -36,15 +38,18 @@ public class CalculationServiceImpl implements CalculationService {
     private final OutputParameterService outputParameterService;
     private final InputParameterService inputParameterService;
     private final ElementRepository elementRepository;
+    private final CalculationDtoMapper calculationDtoMapper;
 
     @Override
-    public Calculation findCalculationById(Long id) {
-        return calculationRepository.findById(id).orElse(null);
+    public CalculationDto findCalculationById(Long id) {
+        return calculationDtoMapper
+                .mapToCalculationDto(
+                        calculationRepository.findById(id).orElse(null)
+                );
     }
 
     @Override
-    @Transactional
-    public Calculation calculate(
+    public CalculationDto calculate(
             List<InputParameterAndElementValue> inputParameterAndElementValueList,
             List<OutputParameterIdAndFormula> outputParameterIdAndFormulaList,
             Timestamp actionDate) {
@@ -52,17 +57,17 @@ public class CalculationServiceImpl implements CalculationService {
                 inputParameterAndElementValueList,
                 outputParameterIdAndFormulaList
         );
-        Calculation calculation = new Calculation(
+        CalculationDto calculationDto = new CalculationDto(
                 null,
                 actionDate,
                 new ArrayList<>(),
                 new ArrayList<>()
         );
-        List<InputElementTransaction> inputElementTransactionList =
+        List<InputElementTransactionDto> inputElementTransactionDtoList =
                 inputAndOutputParameterElementList
                         .stream()
                         .parallel()
-                        .map(o -> createInputElementTransactionEachInputValue(o, calculation))
+                        .map(o -> createInputElementTransactionEachInputValue(o, calculationDto))
                         .toList();
         List<CalculatedOutputParameterForElement> calculateForEachElementByOwnParameter =
                 inputAndOutputParameterElementList
@@ -70,93 +75,113 @@ public class CalculationServiceImpl implements CalculationService {
                         .parallel()
                         .map(this::calculateForEachElementByOwnParameter)
                         .toList();
-        List<OutputElementTransaction> outputElementTransactionList =
+        List<OutputElementTransactionDto> outputElementTransactionDtoList = new ArrayList<>();
+                /*
                 calculateForEachElementByOwnParameter
                         .stream()
-                        .parallel()
                         .map(o -> createOutputElementTransactionEachInputValue(o, calculation))
-                        .toList();
-        calculation.setInputElementTransactionList(inputElementTransactionList);
-        calculation.setOutputElementTransactionList(outputElementTransactionList);
-        return calculationRepository.save(calculation);
+                        .toList();*/
+        calculationDto.setInputElementTransactionList(inputElementTransactionDtoList);
+        calculationDto.setOutputElementTransactionList(outputElementTransactionDtoList);
+        return calculationDtoMapper
+                .mapToCalculationDto(
+                        calculationRepository.save(
+                                calculationDtoMapper
+                                        .mapToCalculation(
+                                                calculationDto
+                                        )
+                        )
+                );
     }
 
-    private OutputElementTransaction createOutputElementTransactionEachInputValue(
+    private OutputElementTransactionDto createOutputElementTransactionEachInputValue(
             CalculatedOutputParameterForElement calculatedOutputParameterForElement
-            , Calculation calculation) {
-        OutputElementTransaction outputElementTransaction = new OutputElementTransaction(
+            , CalculationDto calculationDto) {
+        OutputElementTransactionDto outputElementTransactionDto = new OutputElementTransactionDto(
                 null
                 , elementRepository.getReferenceById(calculatedOutputParameterForElement.getElementId())
-                , calculation
+                , calculationDto
                 , new ArrayList<>()
         );
-        outputElementTransaction.setOutputElementValueList(
+        outputElementTransactionDto.setOutputElementValueList(
                 creatOutputParamValue(
-                        outputElementTransaction,
+                        outputElementTransactionDto,
                         calculatedOutputParameterForElement
                 )
         );
-        return outputElementTransaction;
+        return outputElementTransactionDto;
     }
 
-    private List<OutputElementValue> creatOutputParamValue(
-            OutputElementTransaction outputElementTransaction
+    private List<OutputElementValueDto> creatOutputParamValue(
+            OutputElementTransactionDto outputElementTransactionDto
             , CalculatedOutputParameterForElement calculatedOutputParameterForElements
     ) {
-        List<OutputElementValue> result = new ArrayList<>();
+        List<OutputElementValueDto> result = new ArrayList<>();
         calculatedOutputParameterForElements.getOutputParamValueMapList()
-                .forEach((outputParameter, s) ->
+                .forEach((outputParameterDto, s) ->
                         result.add(
-                                new OutputElementValue(
+                                new OutputElementValueDto(
                                         null
                                         , s
-                                        , outputParameter.getDataType()
-                                        , outputParameter
-                                        , outputElementTransaction
+                                        , outputParameterDto.getDataType()
+                                        , outputParameterDto
+                                        , outputElementTransactionDto
                                         , calculatedOutputParameterForElements.getOutputParamFormulaMapList()
-                                        .get(outputParameter.getId())
+                                        .get(outputParameterDto.getId())
                                 )
                         )
                 );
         return result;
     }
 
-    private InputElementTransaction createInputElementTransactionEachInputValue(
+
+    private InputElementTransactionDto createInputElementTransactionEachInputValue(
             InputAndOutputParameterElement inputAndOutputParameterElement
-            , Calculation calculation
+            , CalculationDto calculationDto
     ) {
-        InputElementTransaction inputElementTransaction = new InputElementTransaction(
-                null,
-                elementRepository.getReferenceById(inputAndOutputParameterElement.getElementId()),
-                calculation,
-                new ArrayList<>());
-        inputElementTransaction.setInputElementValueList(
-                creatInputParamValue(
-                        inputElementTransaction,
-                        inputAndOutputParameterElement
-                )
-        );
-        return inputElementTransaction;
+        InputElementTransactionDto inputElementTransactionDto = new InputElementTransactionDto();
+        try {
+
+            inputElementTransactionDto = new InputElementTransactionDto(
+                    null,
+                    elementRepository.getReferenceById(inputAndOutputParameterElement.getElementId()),
+                    calculationDto,
+                    new ArrayList<>());
+            inputElementTransactionDto.setInputElementValueList(
+                    creatInputParamValue(
+                            inputElementTransactionDto,
+                            inputAndOutputParameterElement
+                    )
+            );
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return inputElementTransactionDto;
     }
 
-    private List<InputElementValue> creatInputParamValue(
-            InputElementTransaction inputElementTransaction
+    private List<InputElementValueDto> creatInputParamValue(
+            InputElementTransactionDto inputElementTransaction
             , InputAndOutputParameterElement inputAndOutputParameterElement
     ) {
-        List<InputElementValue> result = new ArrayList<>();
-        inputAndOutputParameterElement
-                .getInputParamMapList()
-                .forEach((inputParameter, s) ->
-                        result.add(
-                                new InputElementValue(
-                                        null,
-                                        s,
-                                        inputParameter.getDataType(),
-                                        inputParameter,
-                                        inputElementTransaction
-                                )
-                        )
-                );
+        List<InputElementValueDto> result = new ArrayList<>();
+        try {
+            inputAndOutputParameterElement
+                    .getInputParamMapList()
+                    .forEach((inputParameter, s) ->
+                            result.add(
+                                    new InputElementValueDto(
+                                            null,
+                                            s,
+                                            inputParameter.getDataType(),
+                                            inputParameter,
+                                            inputElementTransaction
+                                    )
+                            )
+                    );
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
         return result;
     }
 
@@ -193,9 +218,12 @@ public class CalculationServiceImpl implements CalculationService {
         return calculatedOutputParameterForElement;
     }
 
-    private Map<OutputParameter, String> doCalculationFormulaScript(String script, Map<OutputParameter, Formula> outputParamMapList) {
+    private Map<OutputParameterDto, String> doCalculationFormulaScript(
+            String script,
+            Map<OutputParameterDto, FormulaDto> outputParameterDtoFormulaDtoMap
+    ) {
         Map<Object, Object> outputParamMap = new LinkedHashMap<>();
-        Map<OutputParameter, String> outputParameterValueMap = new LinkedHashMap<>();
+        Map<OutputParameterDto, String> outputParameterDtoValueMap = new LinkedHashMap<>();
         try {
             ScriptEngineManager manager = new ScriptEngineManager();
             ScriptEngine engine = manager.getEngineByName("graal.js");
@@ -213,24 +241,24 @@ public class CalculationServiceImpl implements CalculationService {
         } catch (ScriptException | NoSuchMethodException | JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-        outputParamMapList.forEach((outputParameter, s) -> {
+        outputParameterDtoFormulaDtoMap.forEach((outputParameter, s) -> {
             String result = String.valueOf(outputParamMap.get("O_" + outputParameter.getId()));
-            outputParameterValueMap.put(outputParameter, result);
+            outputParameterDtoValueMap.put(outputParameter, result);
         });
-        return outputParameterValueMap;
+        return outputParameterDtoValueMap;
     }
 
-    private BiConsumer<InputParameter, String> getBuilderToAddInputToFormula(StringBuilder formulaBuilder) {
-        return (inputParameter, s) ->
+    private BiConsumer<InputParameterDto, String> getBuilderToAddInputToFormula(StringBuilder formulaBuilder) {
+        return (inputParameterDto, s) ->
                 formulaBuilder
                         .append("var I_")
-                        .append(inputParameter.getId())
+                        .append(inputParameterDto.getId())
                         .append(" = ")
-                        .append(setInputValue(inputParameter, s))
+                        .append(setInputValue(inputParameterDto, s))
                         .append(";\n");
     }
 
-    private BiConsumer<OutputParameter, Formula> getBuilderToAddOutputToFormula(StringBuilder formulaBuilder) {
+    private BiConsumer<OutputParameterDto, FormulaDto> getBuilderToAddOutputToFormula(StringBuilder formulaBuilder) {
         return (outputParameter, formula) ->
                 formulaBuilder
                         .append("var getO_")
@@ -240,18 +268,18 @@ public class CalculationServiceImpl implements CalculationService {
                         .append("};\n");
     }
 
-    private Consumer<OutputParameter> getBuilderToAddOutputToCalculation(StringBuilder formulaBuilder) {
-        return outputParameter ->
+    private Consumer<OutputParameterDto> getBuilderToAddOutputToCalculation(StringBuilder formulaBuilder) {
+        return outputParameterDto ->
                 formulaBuilder
                         .append("_values.set(\"O_")
-                        .append(outputParameter.getId())
+                        .append(outputParameterDto.getId())
                         .append("\",getO_")
-                        .append(outputParameter.getId())
+                        .append(outputParameterDto.getId())
                         .append("());\n");
     }
 
-    private Object setInputValue(InputParameter inputParameter, String s) {
-        return inputParameter.getDataType().equals("TEXT") ? "'" + s + "'" : s;
+    private Object setInputValue(InputParameterDto inputParameterDto, String s) {
+        return inputParameterDto.getDataType().equals("TEXT") ? "'" + s + "'" : s;
     }
 
     private List<InputAndOutputParameterElement> getCalculationInformation(
