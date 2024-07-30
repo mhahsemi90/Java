@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,9 +31,10 @@ class OutputParameterServiceImplTest {
         OutputParameterInput outputParameterInput = new OutputParameterInput(null, "Test1", "Test2", "TEXT");
         OutputParameter outputParameterMapped = new OutputParameter(null, "Test1", "Test2", "TEXT", new ArrayList<>());
         OutputParameter outputParameterPersisted = new OutputParameter(1L, "Test1", "Test2", "TEXT", new ArrayList<>());
-        when(outputParameterInputMapper.mapToOutputParameter(outputParameterInput))
+        when(outputParameterInputMapper
+                .mapToOutputParameter(outputParameterInput))
                 .then(invocation -> outputParameterMapped);
-        when(outputParameterRepository.save(outputParameterMapped))
+        lenient().when(outputParameterRepository.save(outputParameterMapped))
                 .then(invocation -> outputParameterPersisted);
         OutputParameterAssert.assertThat(outputParameterService.persistOutputParameter(outputParameterInput))
                 .isSameAs(outputParameterPersisted);

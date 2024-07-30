@@ -1,6 +1,5 @@
 package calculation.services.interfaces;
 
-import calculation.repository.entity.Formula;
 import calculation.repository.entity.OutputParameter;
 import calculation.services.dto.entity.FormulaDto;
 import calculation.services.dto.entity.OutputParameterDto;

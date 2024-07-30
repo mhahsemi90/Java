@@ -1,6 +1,5 @@
 package calculation.controller;
 
-import calculation.repository.entity.Calculation;
 import calculation.services.dto.entity.CalculationDto;
 import calculation.services.inputs.InputParameterAndElementValue;
 import calculation.services.inputs.OutputParameterIdAndFormula;

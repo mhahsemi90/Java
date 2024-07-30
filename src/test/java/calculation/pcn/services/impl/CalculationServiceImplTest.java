@@ -27,7 +27,7 @@ class CalculationServiceImplTest {
 
     @Test
     void findCalculationByIdTest() {
-        /*when(calculationRepository.findById(0L))
+        when(calculationRepository.findById(0L))
                 .then(invocation -> Optional.empty());
         CalculationDtoAssert
                 .assertThat(calculationService.findCalculationById(0L))
@@ -51,6 +51,6 @@ class CalculationServiceImplTest {
                 .isSameAs(calculationDto);
         CalculationDtoAssert
                 .assertThat(calculationService.findCalculationById(1L))
-                .isInstanceOf(CalculationDto.class);*/
+                .isInstanceOf(CalculationDto.class);
     }
 }

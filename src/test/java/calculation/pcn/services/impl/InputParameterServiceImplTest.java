@@ -31,7 +31,8 @@ class InputParameterServiceImplTest {
         InputParameterInput inputParameterInput = new InputParameterInput(null, "Test1", "Test2", "TEXT");
         InputParameter inputParameterMapped = new InputParameter(null, "Test1", "Test2", "TEXT", new ArrayList<>());
         InputParameter inputParameterPersisted = new InputParameter(1L, "Test1", "Test2", "TEXT", new ArrayList<>());
-        when(inputParameterInputMapper.mapToInputParameter(inputParameterInput))
+        when(inputParameterInputMapper
+                .mapToInputParameter(inputParameterInput))
                 .then(invocation -> inputParameterMapped);
         when(inputParameterRepository.save(inputParameterMapped))
                 .then(invocation -> inputParameterPersisted);

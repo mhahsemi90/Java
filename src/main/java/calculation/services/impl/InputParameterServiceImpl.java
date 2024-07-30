@@ -6,6 +6,7 @@ import calculation.services.dto.entity.InputParameterDto;
 import calculation.services.inputs.InputParameterAndElementValue;
 import calculation.services.inputs.InputParameterInput;
 import calculation.services.interfaces.InputParameterService;
+import calculation.services.mapper.CycleAvoidingMappingContext;
 import calculation.services.mapper.InputParameterDtoMapper;
 import calculation.services.mapper.InputParameterInputMapper;
 import lombok.AllArgsConstructor;
@@ -25,7 +26,8 @@ public class InputParameterServiceImpl implements InputParameterService {
     @Override
     public InputParameter persistInputParameter(InputParameterInput inputParameterInput) {
         return inputParameterRepository.save(
-                inputParameterInputMapper.mapToInputParameter(inputParameterInput)
+                inputParameterInputMapper
+                        .mapToInputParameter(inputParameterInput)
         );
     }
 
@@ -43,7 +45,8 @@ public class InputParameterServiceImpl implements InputParameterService {
                                         inputParameterRepository
                                                 .getReferenceById(
                                                         inputParameterAndElementValue.getInputParameterId()
-                                                )
+                                                ),
+                                        new CycleAvoidingMappingContext()
                                 )
                 , InputParameterAndElementValue::getValue
         );

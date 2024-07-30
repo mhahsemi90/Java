@@ -1,16 +1,16 @@
 package calculation.services.interfaces;
 
+import calculation.services.dto.expression.ExpressionType;
 import calculation.services.dto.expression.OneHandOperatorExpression;
 import calculation.services.dto.expression.TwoHandOperatorExpression;
 import calculation.services.dto.expression.Variable;
 import calculation.services.dto.statement.Statement;
 import calculation.services.dto.token.Token;
+import calculation.services.dto.token.TokenType;
 import calculation.services.exception.HandledError;
 import calculation.services.impl.MainStatementGeneratorImpl;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import calculation.services.dto.expression.ExpressionType;
-import calculation.services.dto.token.TokenType;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -2,10 +2,10 @@ package calculation.services.impl;
 
 import calculation.services.dto.statement.BlockStatement;
 import calculation.services.dto.statement.Statement;
+import calculation.services.dto.statement.StatementType;
 import calculation.services.dto.token.Token;
 import calculation.services.interfaces.StatementGenerator;
 import org.apache.commons.collections4.CollectionUtils;
-import calculation.services.dto.statement.StatementType;
 
 import java.util.List;
 

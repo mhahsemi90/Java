@@ -27,7 +27,7 @@ class CalculationControllerTest {
 
     @Test
     void findCalculationById() {
-       /* when(calculationService.findCalculationById(0L))
+        when(calculationService.findCalculationById(0L))
                 .then(invocation -> null);
         CalculationDtoAssert
                 .assertThat(calculationController.findCalculationById(0L))
@@ -50,6 +50,6 @@ class CalculationControllerTest {
                 .isSameAs(calculationDto);
         CalculationDtoAssert
                 .assertThat(calculationController.findCalculationById(1L))
-                .isInstanceOf(CalculationDto.class);*/
+                .isInstanceOf(CalculationDto.class);
     }
 }

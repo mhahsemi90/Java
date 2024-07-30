@@ -4,6 +4,7 @@ import calculation.repository.entity.ElementType;
 import calculation.repository.service.interfaces.ElementTypeRepository;
 import calculation.services.inputs.ElementTypeInput;
 import calculation.services.interfaces.ElementTypeService;
+import calculation.services.mapper.CycleAvoidingMappingContext;
 import calculation.services.mapper.ElementTypeDtoMapper;
 import calculation.services.mapper.ElementTypeInputMapper;
 import lombok.AllArgsConstructor;
@@ -23,8 +24,10 @@ public class ElementTypeServiceImpl implements ElementTypeService {
                         .mapToElementType(
                                 elementTypeInputMapper
                                         .mapToElementTypeDto(
-                                                elementTypeInput
-                                        )
+                                                elementTypeInput,
+                                                new CycleAvoidingMappingContext()
+                                        ),
+                                new CycleAvoidingMappingContext()
                         )
         );
     }

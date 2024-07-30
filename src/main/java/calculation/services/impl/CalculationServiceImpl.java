@@ -8,10 +8,10 @@ import calculation.services.dto.entity.*;
 import calculation.services.inputs.InputParameterAndElementValue;
 import calculation.services.inputs.OutputParameterIdAndFormula;
 import calculation.services.interfaces.CalculationService;
-import calculation.services.interfaces.ElementService;
 import calculation.services.interfaces.InputParameterService;
 import calculation.services.interfaces.OutputParameterService;
 import calculation.services.mapper.CalculationDtoMapper;
+import calculation.services.mapper.CycleAvoidingMappingContext;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
@@ -44,7 +44,8 @@ public class CalculationServiceImpl implements CalculationService {
     public CalculationDto findCalculationById(Long id) {
         return calculationDtoMapper
                 .mapToCalculationDto(
-                        calculationRepository.findById(id).orElse(null)
+                        calculationRepository.findById(id).orElse(null),
+                        new CycleAvoidingMappingContext()
                 );
     }
 
@@ -75,12 +76,11 @@ public class CalculationServiceImpl implements CalculationService {
                         .parallel()
                         .map(this::calculateForEachElementByOwnParameter)
                         .toList();
-        List<OutputElementTransactionDto> outputElementTransactionDtoList = new ArrayList<>();
-                /*
+        List<OutputElementTransactionDto> outputElementTransactionDtoList =
                 calculateForEachElementByOwnParameter
                         .stream()
-                        .map(o -> createOutputElementTransactionEachInputValue(o, calculation))
-                        .toList();*/
+                        .map(o -> createOutputElementTransactionEachInputValue(o, calculationDto))
+                        .toList();
         calculationDto.setInputElementTransactionList(inputElementTransactionDtoList);
         calculationDto.setOutputElementTransactionList(outputElementTransactionDtoList);
         return calculationDtoMapper
@@ -88,9 +88,11 @@ public class CalculationServiceImpl implements CalculationService {
                         calculationRepository.save(
                                 calculationDtoMapper
                                         .mapToCalculation(
-                                                calculationDto
+                                                calculationDto,
+                                                new CycleAvoidingMappingContext()
                                         )
-                        )
+                        ),
+                        new CycleAvoidingMappingContext()
                 );
     }
 

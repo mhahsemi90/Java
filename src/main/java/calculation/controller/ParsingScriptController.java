@@ -7,7 +7,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
@@ -18,7 +20,7 @@ public class ParsingScriptController {
     private final ParsingScriptService parsingScriptService;
 
     @PostMapping()
-    public ResponseEntity<List<Statement>> parsingScript(@RequestBody()ScriptDto script) {
+    public ResponseEntity<List<Statement>> parsingScript(@RequestBody() ScriptDto script) {
         List<Statement> parsingData = parsingScriptService.parsing(script.getScript());
         return new ResponseEntity<>(parsingData, HttpStatus.OK);
     }

@@ -1,6 +1,5 @@
 package calculation.services.dto;
 
-import calculation.repository.entity.Formula;
 import calculation.services.dto.entity.FormulaDto;
 import calculation.services.dto.entity.OutputParameterDto;
 import lombok.AllArgsConstructor;

@@ -8,6 +8,7 @@ import calculation.services.dto.entity.OutputParameterDto;
 import calculation.services.inputs.OutputParameterIdAndFormula;
 import calculation.services.inputs.OutputParameterInput;
 import calculation.services.interfaces.OutputParameterService;
+import calculation.services.mapper.CycleAvoidingMappingContext;
 import calculation.services.mapper.FormulaDtoMapper;
 import calculation.services.mapper.OutputParameterDtoMapper;
 import calculation.services.mapper.OutputParameterInputMapper;
@@ -30,7 +31,8 @@ public class OutputParameterServiceImpl implements OutputParameterService {
     @Override
     public OutputParameter persistOutputParameter(OutputParameterInput outputParameterInput) {
         return outputParameterRepository.save(
-                outputParameterInputMapper.mapToOutputParameter(outputParameterInput)
+                outputParameterInputMapper
+                        .mapToOutputParameter(outputParameterInput)
         );
     }
 
@@ -48,7 +50,8 @@ public class OutputParameterServiceImpl implements OutputParameterService {
                                         outputParameterRepository
                                                 .getReferenceById(
                                                         outputParameterIdAndFormula.getOutputParameterId()
-                                                )
+                                                ),
+                                        new CycleAvoidingMappingContext()
                                 )
                 , outputParameterIdAndFormula ->
                         formulaDtoMapper
@@ -56,7 +59,8 @@ public class OutputParameterServiceImpl implements OutputParameterService {
                                         formulaRepository
                                                 .findById(
                                                         outputParameterIdAndFormula.getFormulaId()
-                                                ).orElse(null)
+                                                ).orElse(null),
+                                        new CycleAvoidingMappingContext()
                                 )
         );
     }

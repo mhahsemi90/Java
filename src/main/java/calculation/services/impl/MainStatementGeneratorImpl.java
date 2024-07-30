@@ -2,11 +2,11 @@ package calculation.services.impl;
 
 import calculation.services.dto.statement.Statement;
 import calculation.services.dto.token.Token;
+import calculation.services.dto.token.TokenType;
 import calculation.services.interfaces.StatementGenerator;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-import calculation.services.dto.token.TokenType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -172,9 +172,9 @@ public class MainStatementGeneratorImpl implements StatementGenerator {
                 && tokenList.get(tokenList.size() - 1).getTokenType() != TokenType.NEW_LINE)
             tokenList.add(new Token(TokenType.NEW_LINE, String.valueOf(lineNumber), 0));
         List<Statement> statementList = getAllStatementFromTokenList(tokenList);
-        if(CollectionUtils.isNotEmpty(statementList) &&
-                statementList.get(statementList.size()-1)==null)
-            statementList.remove(statementList.size()-1);
+        if (CollectionUtils.isNotEmpty(statementList) &&
+                statementList.get(statementList.size() - 1) == null)
+            statementList.remove(statementList.size() - 1);
         return statementList;
     }
 

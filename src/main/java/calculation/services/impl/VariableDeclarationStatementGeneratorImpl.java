@@ -6,9 +6,9 @@ import calculation.services.dto.statement.ExpressionStatement;
 import calculation.services.dto.statement.Statement;
 import calculation.services.dto.statement.VariableDeclarationStatement;
 import calculation.services.dto.token.Token;
+import calculation.services.dto.token.TokenType;
 import calculation.services.exception.HandledError;
 import calculation.services.interfaces.StatementGenerator;
-import calculation.services.dto.token.TokenType;
 
 import java.util.ArrayList;
 import java.util.List;
